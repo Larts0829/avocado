@@ -363,12 +363,6 @@ const Upload: React.FC = () => {
                   {image && (
                     <>
                       <img src={image} alt="Analyzed" className="analysis-image" />
-                      {result && (
-                        <div className="confidence-overlay">
-                          <IonIcon icon={checkmarkCircleOutline} />
-                          <span>{(result.confidence * 100).toFixed(0)}% confidence</span>
-                        </div>
-                      )}
                     </>
                   )}
                 </div>
@@ -376,7 +370,7 @@ const Upload: React.FC = () => {
                 {result && (
                   <div className="analysis-details">
                     <div className="disease-status">
-                      <h3>Disease: <span className={result.label.toLowerCase().includes('healthy') ? 'status-healthy' : 'status-disease'}>{getDiseaseStatus(result.label)}</span></h3>
+                      <h3>{result.label.toLowerCase().includes('pest') || result.label.toLowerCase().includes('borer') || result.label.toLowerCase().includes('scale') ? 'Pest' : 'Disease'} Detected: <span className={result.label.toLowerCase().includes('healthy') ? 'status-healthy' : 'status-disease'}>{getDiseaseStatus(result.label)}</span></h3>
                     </div>
 
                     <p className="disease-description">{getDescription(result.label)}</p>

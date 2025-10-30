@@ -4,8 +4,10 @@
 
 .history-toolbar {
   --background: white;
-  --border-color: #e5e7eb;
+  --border-color: transparent;
   --min-height: 56px;
+  --box-shadow: none;
+  box-shadow: none;
 }
 
 /* Make back button visible */
@@ -43,7 +45,6 @@
   background: white;
   border-radius: 16px;
   padding: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .stat-label {
@@ -123,7 +124,6 @@
   background: white;
   border-radius: 16px;
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   gap: 1rem;
   cursor: pointer;
@@ -199,14 +199,6 @@
   font-size: 0.9rem;
 }
 
-.confidence-meta {
-  margin-left: auto;
-  background: #fef3c7;
-  color: #92400e;
-  padding: 0.25rem 0.6rem;
-  border-radius: 8px;
-  font-weight: 600;
-}
 
 /* Detail Modal */
 .detail-content {
@@ -239,28 +231,38 @@
   margin-bottom: 1.5rem;
 }
 
+.detection-type-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #10b981;
+  margin-bottom: 1rem;
+}
+
+.detection-icon {
+  font-size: 1.5rem;
+  color: #10b981;
+}
+
 .detail-label-badge {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   margin-bottom: 0.75rem;
 }
 
-.detail-confidence {
-  font-size: 0.9rem;
-  color: #718096;
-  font-weight: 600;
-}
 
 .detail-section {
   background: white;
   border-radius: 16px;
   padding: 1.25rem;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .detail-section h3 {
@@ -311,33 +313,6 @@
   font-weight: 600;
 }
 
-.confidence-meter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: #fef3c7;
-  border-radius: 12px;
-}
-
-.confidence-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #92400e;
-  font-weight: 600;
-}
-
-.confidence-label ion-icon {
-  font-size: 1.2rem;
-}
-
-.confidence-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #92400e;
-}
 
 .recommendations-list {
   display: flex;

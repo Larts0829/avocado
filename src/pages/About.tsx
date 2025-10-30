@@ -12,20 +12,20 @@ interface TeamMember {
 const About: React.FC = () => {
   const teamMembers: TeamMember[] = [
     {
-      name: "Dr. Maria Santos",
-      role: "Lead Researcher",
+      name: "John Paul Devanadera",
+      role: "Data Scientist",
       description: "Agricultural scientist with 15+ years of experience in crop disease detection and AI applications.",
-      initials: "MS",
+      initials: "JP",
     },
     {
-      name: "James Chen",
+      name: "John Mar Vincent Lat",
       role: "Lead Developer",
       description: "Full-stack developer specializing in mobile applications and machine learning integration.",
-      initials: "JC",
+      initials: "JM",
     },
     {
-      name: "Sofia Rodriguez",
-      role: "Product Manager",
+      name: "Irish Joanne Roxas",
+      role: "Documentator",
       description: "Product strategist focused on creating intuitive solutions for agricultural challenges.",
       initials: "SR",
     },

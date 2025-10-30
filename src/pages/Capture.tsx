@@ -14,7 +14,8 @@ import {
   IonBackButton,
   IonSegment,
   IonSegmentButton,
-  IonLabel
+  IonLabel,
+  IonModal
 } from '@ionic/react';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { flashlightOutline, cameraOutline, checkmarkCircleOutline, leafOutline, nutritionOutline } from 'ionicons/icons';
@@ -64,12 +65,20 @@ function isBoundingBox(obj: any): obj is BoundingBox {
   );
 }
 
+// Helper function to capitalize first letter
+function capitalizeFirstLetter(text: string): string {
+  if (!text) return text;
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
+
 const Capture: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [modelType, setModelType] = useState<'leaf' | 'tree' | 'fruit' | ''>('leaf');
   const [result, setResult] = useState<DetectionResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [showResultModal, setShowResultModal] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLIonImgElement>(null);
 
@@ -142,6 +151,7 @@ const Capture: React.FC = () => {
         };
         
         setResult(result);
+        setShowResultModal(true);
       } else {
         setError('No detection results received.');
       }
@@ -219,8 +229,9 @@ const Capture: React.FC = () => {
         recommendations
       });
 
-      setError('Saved to history successfully!');
-      setTimeout(() => setError(null), 2000);
+      setSuccessMessage('Saved to history successfully!');
+      setShowResultModal(false);
+      setTimeout(() => setSuccessMessage(null), 2000);
     } catch (err) {
       console.error('Failed to save to history:', err);
       const errorMessage = (err as Error).message || 'Unknown error';
@@ -366,65 +377,73 @@ const Capture: React.FC = () => {
             </button>
           </div>
 
-          {/* Capture Tips */}
-          <div className="capture-tips">
-            <h3 className="tips-title">Capture Tips</h3>
-            <div className="tips-list">
-              <div className="tip-item">
-                <IonIcon icon={checkmarkCircleOutline} className="tip-icon" />
-                <span>Ensure good lighting</span>
-              </div>
-              <div className="tip-item">
-                <IonIcon icon={checkmarkCircleOutline} className="tip-icon" />
-                <span>Keep subject in focus</span>
-              </div>
-              <div className="tip-item">
-                <IonIcon icon={checkmarkCircleOutline} className="tip-icon" />
-                <span>Fill the frame</span>
-              </div>
-            </div>
-          </div>
+          {/* Results Modal */}
+          <IonModal isOpen={showResultModal} onDidDismiss={() => setShowResultModal(false)} className="ion-color-light">
+            <IonHeader>
+              <IonToolbar color="light">
+                <IonTitle>Detection Complete</IonTitle>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent className="modal-content ion-color-light">
+              {result && (
+                <div className="modal-results-container">
+                  {/* Show captured image */}
+                  {image && (
+                    <div className="modal-image-preview">
+                      <IonImg src={image} alt="Captured" />
+                    </div>
+                  )}
+                  
+                  <div className="detection-label-section">
+                    <IonIcon icon={checkmarkCircleOutline} className="detection-check-icon" />
+                    <div>
+                      <div className="detection-type-text">
+                        {result.label.toLowerCase().includes('pest') || 
+                         result.label.toLowerCase().includes('borer') || 
+                         result.label.toLowerCase().includes('scale') ? 'Pest' : 'Disease'} Detected
+                      </div>
+                      <div className="result-label">{capitalizeFirstLetter(result.label)}</div>
+                    </div>
+                  </div>
+                  <p className="result-date">Analyzed: {new Date().toLocaleDateString()}</p>
+                  
+                  <div className="result-actions">
+                    <h4>Immediate Actions</h4>
+                    <div className="action-item">
+                      <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
+                      <span>Early intervention recommended</span>
+                    </div>
+                    <div className="action-item">
+                      <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
+                      <span>Monitor closely for spread</span>
+                    </div>
+                    <div className="action-item">
+                      <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
+                      <span>Consider biological controls</span>
+                    </div>
+                  </div>
 
-          {/* Results Section */}
-          {result && (
-            <div className="results-card">
-              <div className="result-header">
-                <h3>Analysis Results</h3>
-                <div className="confidence-badge">
-                  {(result.confidence * 100).toFixed(0)}% confidence
-                </div>
-              </div>
-              
-              <div className="result-content">
-                <div className="result-label">{result.label}</div>
-                <p className="result-date">Analyzed: {new Date().toLocaleDateString()}</p>
-                
-                <div className="result-actions">
-                  <h4>Immediate Actions</h4>
-                  <div className="action-item">
-                    <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
-                    <span>Early intervention recommended</span>
-                  </div>
-                  <div className="action-item">
-                    <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
-                    <span>Monitor closely for spread</span>
-                  </div>
-                  <div className="action-item">
-                    <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
-                    <span>Consider biological controls</span>
+                  <div className="modal-buttons">
+                    <IonButton 
+                      expand="block" 
+                      className="save-history-btn"
+                      onClick={saveToHistory}
+                    >
+                      Save to History
+                    </IonButton>
+                    <IonButton 
+                      expand="block" 
+                      fill="outline"
+                      className="close-modal-btn"
+                      onClick={() => setShowResultModal(false)}
+                    >
+                      Close
+                    </IonButton>
                   </div>
                 </div>
-
-                <IonButton 
-                  expand="block" 
-                  className="save-history-btn"
-                  onClick={saveToHistory}
-                >
-                  Save to History
-                </IonButton>
-              </div>
-            </div>
-          )}
+              )}
+            </IonContent>
+          </IonModal>
         </div>
 
         <IonLoading isOpen={loading} message="Processing image..." />
@@ -434,6 +453,14 @@ const Capture: React.FC = () => {
           onDidDismiss={() => setError(null)}
           header="Error"
           message={error || ''}
+          buttons={['OK']}
+        />
+
+        <IonAlert
+          isOpen={!!successMessage}
+          onDidDismiss={() => setSuccessMessage(null)}
+          header="Success"
+          message={successMessage || ''}
           buttons={['OK']}
         />
       </IonContent>

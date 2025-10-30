@@ -37,16 +37,16 @@ const Guide: React.FC = () => {
         "Upload existing photos from your gallery. Supported formats include JPG, PNG, and HEIC. Photos should be clear and well-lit for best results.",
     },
     {
-      id: "view-results",
-      title: "View Results",
+      id: "view-history",
+      title: "View History",
       content:
-        "After analysis, you'll receive detailed results including disease identification, severity level, and recommended treatments.",
+        "Track your analysis results. Access your saved detections, review past analyses, and monitor disease progression over time.",
     },
     {
-      id: "pro-tips",
-      title: "Pro Tips",
+      id: "troubleshooting",
+      title: "Troubleshooting",
       content:
-        "For best results: use natural lighting, focus on affected areas, take multiple angles, and ensure the plant is clearly visible in the frame.",
+        "Common issues and solutions: If detection fails, ensure good lighting. For poor results, retake with better focus. Clear app cache if experiencing performance issues.",
     },
   ]
 
@@ -85,8 +85,8 @@ const Guide: React.FC = () => {
                       {section.id === "getting-started" && "🚀"}
                       {section.id === "camera-capture" && "📷"}
                       {section.id === "upload-photos" && "📤"}
-                      {section.id === "view-results" && "✅"}
-                      {section.id === "pro-tips" && "💡"}
+                      {section.id === "view-history" && "⏱️"}
+                      {section.id === "troubleshooting" && "🔧"}
                     </div>
                     <h3>{section.title}</h3>
                   </div>

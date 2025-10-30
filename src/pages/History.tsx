@@ -147,9 +147,6 @@ const History: React.FC = () => {
                         <IonIcon icon={timeOutline} />
                         <span>{item.time}</span>
                       </div>
-                      <div className="meta-item confidence-meta">
-                        {(item.confidence * 100).toFixed(0)}%
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -184,8 +181,12 @@ const History: React.FC = () => {
                     <IonImg src={selectedItem.imageData} alt={selectedItem.label} />
                   </div>
 
-                  {/* Disease Label */}
+                  {/* Detection Label */}
                   <div className="detail-header">
+                    <div className="detection-type-label">
+                      <IonIcon icon={checkmarkCircleOutline} className="detection-icon" />
+                      <span>{selectedItem.type} Detected</span>
+                    </div>
                     <div 
                       className="detail-label-badge"
                       style={{ 
@@ -193,10 +194,7 @@ const History: React.FC = () => {
                         color: getTypeColor(selectedItem.type)
                       }}
                     >
-                      {selectedItem.label.toUpperCase()}
-                    </div>
-                    <div className="detail-confidence">
-                      {(selectedItem.confidence * 100).toFixed(0)}% confidence
+                      {selectedItem.label}
                     </div>
                   </div>
 
@@ -219,16 +217,6 @@ const History: React.FC = () => {
                           <div className="meta-label">Time</div>
                           <div className="meta-value">{selectedItem.time}</div>
                         </div>
-                      </div>
-                    </div>
-
-                    <div className="confidence-meter">
-                      <div className="confidence-label">
-                        <IonIcon icon={checkmarkCircleOutline} />
-                        <span>Confidence</span>
-                      </div>
-                      <div className="confidence-value">
-                        {(selectedItem.confidence * 100).toFixed(0)}%
                       </div>
                     </div>
                   </div>

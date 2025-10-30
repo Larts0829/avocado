@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync-android": "npm run build && npx cap sync android"
   },
   "dependencies": {
     "@capacitor-community/camera-preview": "^7.0.2",
@@ -20,7 +21,8 @@
     "@capacitor/filesystem": "^7.1.4",
     "@capacitor/haptics": "7.0.2",
     "@capacitor/keyboard": "7.0.3",
-    "@capacitor/status-bar": "7.0.3",
+    "@capacitor/splash-screen": "^7.0.3",
+    "@capacitor/status-bar": "^7.0.3",
     "@ionic/react": "^8.5.0",
     "@ionic/react-router": "^8.5.0",
     "@types/react-router": "^5.1.20",
