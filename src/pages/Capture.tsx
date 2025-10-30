@@ -290,6 +290,9 @@ const Capture: React.FC = () => {
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
           <IonTitle>Snap and Analyze</IonTitle>
+          <IonButtons slot="end">
+            <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 

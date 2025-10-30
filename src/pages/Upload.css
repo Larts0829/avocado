@@ -5,6 +5,19 @@
 .upload-toolbar {
   --background: white;
   --border-color: #e5e7eb;
+  --min-height: 56px;
+}
+
+/* Make back button visible */
+.upload-toolbar ion-back-button {
+  --color: #1f2937;
+  --icon-font-size: 24px;
+}
+
+.toolbar-logo-small {
+  width: 50px;
+  height: 76.82px;
+  object-fit: contain;
 }
 
 .upload-container {

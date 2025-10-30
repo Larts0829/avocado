@@ -1,145 +1,130 @@
+.menu-toolbar {
+  --background: #ffffff;
+  --border-color: #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --min-height: 60px;
+  padding: 0;
+}
+
+.toolbar-content-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 8px 16px;
+}
+
+.toolbar-logo {
+  width: 50px;
+  height: 76.82px;
+  object-fit: contain;
+}
+
+.toolbar-app-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
 .menu-content {
-  --background: #f5f5f7;
+  --background: #f9fafb;
+  --overflow: hidden;
 }
 
 .menu-container {
-  padding: 1.5rem;
-  max-width: 500px;
+  padding: 24px 16px;
+  max-width: 600px;
   margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
-/* Header */
 .menu-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.header-logo-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.header-logo {
-  width: 50px;
-  height: 50px;
-}
-
-.header-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.header-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0;
-}
-
-.header-subtitle {
-  font-size: 0.85rem;
-  color: #718096;
-  margin: 0;
-}
-
-/* Main Heading */
-.main-heading {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 2rem 0;
-  line-height: 1.2;
-}
-
-.heading-accent {
-  color: #10b981;
-}
-
-/* Menu Grid */
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  padding-bottom: 2rem;
-}
-
-/* Menu Card */
-.menu-card {
-  background: white;
-  border-radius: 20px;
-  padding: 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  min-height: 160px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.6s ease-out;
 }
 
-.menu-card:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.card-icon-wrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.card-icon {
-  font-size: 2rem;
-  color: white;
-}
-
-.card-title {
-  font-size: 1.05rem;
+.menu-header h1 {
+  font-size: 28px;
   font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 0.5rem 0;
-}
-
-.card-description {
-  font-size: 0.8rem;
-  color: #718096;
+  color: #1f2937;
   margin: 0;
   line-height: 1.3;
 }
 
-/* Responsive adjustments */
-@media (max-width: 360px) {
+/* Added green highlight for "Today?" */
+.menu-header .highlight {
+  color: #10b981;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Updated card styling with colorful backgrounds */
+.menu-card {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 24px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.menu-card:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Colorful icon backgrounds matching card theme */
+.card-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--card-color, #10b981);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+}
+
+.menu-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.menu-card p {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
   .menu-grid {
-    gap: 0.75rem;
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .menu-card {
-    padding: 1rem 0.75rem;
-    min-height: 140px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .card-icon-wrapper {
-    width: 56px;
-    height: 56px;
-  }
-  
-  .card-icon {
-    font-size: 1.75rem;
-  }
-  
-  .card-title {
-    font-size: 0.95rem;
-  }
-  
-  .card-description {
-    font-size: 0.75rem;
+  to {
+    opacity: 1;
   }
 }

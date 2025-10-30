@@ -1,132 +1,94 @@
-import React from 'react';
-import { IonPage, IonContent, IonIcon } from '@ionic/react';
-import { useHistory } from 'react-router-dom';
-import { 
-  scanOutline, 
-  cloudUploadOutline, 
-  medkitOutline, 
-  timeOutline, 
-  bookOutline, 
-  informationCircleOutline 
-} from 'ionicons/icons';
-import './Menu.css';
+"use client"
 
-interface MenuCard {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  color: string;
-  route: string;
-}
+import type React from "react"
+
+import { IonPage, IonHeader, IonToolbar, IonContent } from "@ionic/react"
+import { useHistory } from "react-router-dom"
+import {
+  cameraOutline,
+  cloudUploadOutline,
+  beakerOutline,
+  helpCircleOutline,
+  timeOutline,
+  informationCircleOutline,
+} from "ionicons/icons"
+import { IonIcon } from "@ionic/react"
+import "./Menu.css"
 
 const Menu: React.FC = () => {
-  const history = useHistory();
+  const history = useHistory()
 
-  const menuCards: MenuCard[] = [
+  const menuItems = [
     {
-      id: 'capture',
-      title: 'Capture',
-      description: 'Avocado, Leaf, Disease, Pest',
-      icon: scanOutline,
-      color: '#10b981',
-      route: '/capture'
+      title: "Capture",
+      icon: cameraOutline,
+      path: "/capture",
+      description: "Avocado, Leaf, Disease, Pest",
+      color: "#10b981",
     },
     {
-      id: 'upload',
-      title: 'Upload',
-      description: 'Upload images of leaf or avocado',
+      title: "Upload",
       icon: cloudUploadOutline,
-      color: '#f59e0b',
-      route: '/upload'
+      path: "/upload",
+      description: "Upload images of leaf or avocado",
+      color: "#f59e0b",
     },
     {
-      id: 'treatments',
-      title: 'Treatments',
-      description: 'Care actions and remedies',
-      icon: medkitOutline,
-      color: '#ef4444',
-      route: '/treatments'
+      title: "Treatments",
+      icon: beakerOutline,
+      path: "/treatments",
+      description: "Care actions and remedies",
+      color: "#ef4444",
     },
+    { title: "User Guide", icon: helpCircleOutline, path: "/guide", description: "User Manual", color: "#8b5cf6" },
+    { title: "History", icon: timeOutline, path: "/history", description: "View past detections", color: "#06b6d4" },
     {
-      id: 'history',
-      title: 'History',
-      description: 'View past analysis results',
-      icon: timeOutline,
-      color: '#06b6d4',
-      route: '/history'
-    },
-    {
-      id: 'guide',
-      title: 'User Guide',
-      description: 'User Manual',
-      icon: bookOutline,
-      color: '#8b5cf6',
-      route: '/guide'
-    },
-    {
-      id: 'about',
-      title: 'About Us',
-      description: 'Learn more about Snapocado',
+      title: "About",
       icon: informationCircleOutline,
-      color: '#10b981',
-      route: '/about'
-    }
-  ];
-
-  const handleCardClick = (route: string) => {
-    history.push(route);
-  };
+      path: "/about",
+      description: "About Snapocado",
+      color: "#ec4899",
+    },
+  ]
 
   return (
     <IonPage>
-      <IonContent className="menu-content">
+      <IonHeader>
+        <IonToolbar className="menu-toolbar">
+          <div className="toolbar-content-left">
+            <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo" />
+            <span className="toolbar-app-name">Snapocado</span>
+          </div>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen className="menu-content">
         <div className="menu-container">
-          {/* Header */}
           <div className="menu-header">
-            <div className="header-logo-section">
-              <svg className="header-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="32" cy="38" rx="20" ry="24" fill="#059669" />
-                <circle cx="32" cy="38" r="10" fill="#92400e" />
-                <circle cx="32" cy="38" r="6" fill="#fbbf24" />
-                <path d="M32 14 Q28 10, 24 12 T20 8" stroke="#065f46" strokeWidth="2" fill="none" />
-                <ellipse cx="24" cy="10" rx="3" ry="4" fill="#065f46" transform="rotate(-20 24 10)" />
-              </svg>
-              <div className="header-text">
-                <h2 className="header-title">Snapocado</h2>
-                <p className="header-subtitle">Snap.Detect.Protect</p>
-              </div>
-            </div>
+            <h1>
+              How Can I Help You <span className="highlight">Today?</span>
+            </h1>
           </div>
 
-          {/* Main Heading */}
-          <h1 className="main-heading">
-            How Can I Help<br />You <span className="heading-accent">Today?</span>
-          </h1>
-
-          {/* Menu Cards Grid */}
           <div className="menu-grid">
-            {menuCards.map((card) => (
-              <div 
-                key={card.id}
+            {menuItems.map((item) => (
+              <button
+                key={item.path}
                 className="menu-card"
-                onClick={() => handleCardClick(card.route)}
+                onClick={() => history.push(item.path)}
+                style={{ "--card-color": item.color } as React.CSSProperties}
               >
-                <div 
-                  className="card-icon-wrapper"
-                  style={{ backgroundColor: card.color }}
-                >
-                  <IonIcon icon={card.icon} className="card-icon" />
+                <div className="card-icon">
+                  <IonIcon icon={item.icon} />
                 </div>
-                <h3 className="card-title">{card.title}</h3>
-                <p className="card-description">{card.description}</p>
-              </div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </button>
             ))}
           </div>
         </div>
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default Menu;
+export default Menu

@@ -76,6 +76,7 @@ const History: React.FC = () => {
           </IonButtons>
           <IonTitle>History</IonTitle>
           <IonButtons slot="end">
+            <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" style={{marginRight: '8px'}} />
             <IonButton onClick={() => setShowClearConfirm(true)}>
               <IonIcon icon={trashOutline} />
             </IonButton>

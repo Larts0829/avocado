@@ -1,0 +1,45 @@
+.treatments-toolbar {
+  --background: #ffffff;
+  --border-color: #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --min-height: 56px;
+}
+
+/* Make back button visible */
+.treatments-toolbar ion-back-button {
+  --color: #1f2937;
+  --icon-font-size: 24px;
+}
+
+.toolbar-logo-small {
+  width: 50px;
+  height: 76.82px;
+  object-fit: contain;
+}
+
+.treatments-content {
+  --background: #f9fafb;
+}
+
+.treatments-container {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.treatments-container h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+}
+
+.treatments-container p {
+  font-size: 16px;
+  color: #4b5563;
+  margin: 0 0 8px 0;
+}
+
+.coming-soon {
+  color: #9ca3af !important;
+  font-style: italic;
+}

@@ -271,7 +271,7 @@ const Upload: React.FC = () => {
           </IonButtons>
           <IonTitle>Upload & Analyze</IonTitle>
           <IonButtons slot="end">
-            <IonIcon icon={imagesOutline} style={{ fontSize: '1.5rem', marginRight: '1rem', color: '#10b981' }} />
+            <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
