@@ -18,7 +18,7 @@ import {
   IonCardTitle
 } from '@ionic/react';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { tfliteService } from '../services/tflite.service';
+import tfliteService from '../services/tflite.service';
 import './Home.css';
 
 interface BoundingBox {

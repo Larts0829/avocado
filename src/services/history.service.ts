@@ -24,7 +24,7 @@ class HistoryService {
         ...item,
         id: `scan_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         date: now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
-        time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
+        time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
       };
 
       history.unshift(newItem); // Add to beginning

@@ -18,7 +18,7 @@ import {
 } from '@ionic/react';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { flashlightOutline, cameraOutline, checkmarkCircleOutline, leafOutline, nutritionOutline } from 'ionicons/icons';
-import { tfliteService } from '../services/tflite.service';
+import tfliteService from '../services/tflite.service';
 import { historyService } from '../services/history.service';
 import './Capture.css';
 
@@ -110,6 +110,10 @@ const Capture: React.FC = () => {
       const prediction = await tfliteService.predictBase64(imageData) as PredictionResult;
 
       if (prediction) {
+        // Native code handles per-class thresholds:
+        // Fruit: "Healthy fruit": 0.50, "scab": 0.50, "anthracnose": 0.60, "borer": 0.50
+        // Tree and Leaf: use default 0.5 threshold
+        
         let x = 0;
         let y = 0;
         let width = 0;

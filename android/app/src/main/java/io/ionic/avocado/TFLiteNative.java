@@ -32,16 +32,28 @@ import java.util.Map;
 public class TFLiteNative extends Plugin {
 
     private static final String TAG = "TFLiteNative";
-    private static final float CONFIDENCE_THRESHOLD = 0.5f; // Minimum confidence to report detection
+    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.5f;
+    private static final Map<String, Float> FRUIT_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
+        put("Healthy fruit", 0.50f);
+        put("scab", 0.50f);
+        put("anthracnose", 0.60f);
+        put("borer", 0.50f);
+    }};
+    
     private Interpreter tflite = null;
     private List<String> labels = new ArrayList<>();
     private int inputSize = 640; // Default for object detection models
     private boolean isObjectDetectionModel = true;
+    private boolean isFruitModel = false;
 
     @PluginMethod
     public void loadModel(PluginCall call) {
         String modelPath = call.getString("modelPath");
         String labelPath = call.getString("labelPath");
+        
+        // Check if this is a fruit model
+        isFruitModel = modelPath != null && modelPath.contains("fruit");
+        Log.d(TAG, "Loading model. isFruitModel: " + isFruitModel);
 
         if (modelPath == null || labelPath == null) {
             call.reject("Model path and label path are required");
@@ -196,9 +208,18 @@ public class TFLiteNative extends Plugin {
                     }
                 }
 
+                // Get the appropriate threshold for this class
+                String detectedClass = labels.get(maxClassIndex);
+                float threshold = isFruitModel ? 
+                    FRUIT_CONFIDENCE_THRESHOLDS.getOrDefault(detectedClass, DEFAULT_CONFIDENCE_THRESHOLD) :
+                    DEFAULT_CONFIDENCE_THRESHOLD;
+                    
+                Log.d(TAG, String.format("Detected: %s (%.2f), Threshold: %.2f", 
+                    detectedClass, maxConfidence, threshold));
+                
                 // Check if confidence meets threshold
-                if (maxConfidence < CONFIDENCE_THRESHOLD) {
-                    Log.d(TAG, "Detection confidence " + maxConfidence + " below threshold " + CONFIDENCE_THRESHOLD);
+                if (maxConfidence < threshold) {
+                    Log.d(TAG, "Detection confidence " + maxConfidence + " below threshold " + threshold);
                     JSObject result = new JSObject();
                     result.put("label", "No object detected");
                     result.put("confidence", 0.0f);
@@ -320,25 +341,58 @@ public class TFLiteNative extends Plugin {
         }
     }
 
+    private Bitmap resizeAndPad(Bitmap source, int targetWidth, int targetHeight) {
+        // Calculate the aspect ratio of the source image
+        float sourceAspect = (float) source.getWidth() / source.getHeight();
+        float targetAspect = (float) targetWidth / targetHeight;
+        
+        int newWidth, newHeight;
+        int xOffset = 0, yOffset = 0;
+        
+        if (sourceAspect > targetAspect) {
+            // Source is wider than target aspect ratio
+            newWidth = targetWidth;
+            newHeight = (int) (targetWidth / sourceAspect);
+            yOffset = (targetHeight - newHeight) / 2;
+        } else {
+            // Source is taller than target aspect ratio
+            newHeight = targetHeight;
+            newWidth = (int) (targetHeight * sourceAspect);
+            xOffset = (targetWidth - newWidth) / 2;
+        }
+        
+        // Create a new bitmap with the target dimensions
+        Bitmap result = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
+        android.graphics.Canvas canvas = new android.graphics.Canvas(result);
+        
+        // Fill with black (or any other color you prefer)
+        canvas.drawColor(0xFF000000);
+        
+        // Draw the resized image centered on the canvas
+        android.graphics.Rect src = new android.graphics.Rect(0, 0, source.getWidth(), source.getHeight());
+        android.graphics.RectF dst = new android.graphics.RectF(xOffset, yOffset, xOffset + newWidth, yOffset + newHeight);
+        canvas.drawBitmap(source, src, dst, null);
+        
+        return result;
+    }
+
     private ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap) {
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3);
         byteBuffer.order(ByteOrder.nativeOrder());
-
+        
         int[] intValues = new int[inputSize * inputSize];
         bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-
+        
         int pixel = 0;
-        for (int i = 0; i < inputSize; i++) {
-            for (int j = 0; j < inputSize; j++) {
+        for (int i = 0; i < inputSize; ++i) {
+            for (int j = 0; j < inputSize; ++j) {
                 final int val = intValues[pixel++];
-                
-                // Normalize to [0, 1] range
+                // Normalize pixel values to [0, 1]
                 byteBuffer.putFloat(((val >> 16) & 0xFF) / 255.0f);
                 byteBuffer.putFloat(((val >> 8) & 0xFF) / 255.0f);
                 byteBuffer.putFloat((val & 0xFF) / 255.0f);
             }
         }
-
         return byteBuffer;
     }
 
@@ -351,7 +405,8 @@ public class TFLiteNative extends Plugin {
         int imageHeight
     ) {
         JSArray detections = new JSArray();
-        float confidenceThreshold = 0.3f; // Only return detections with >50% confidence
+        // Use the same confidence threshold as defined at class level
+        float confidenceThreshold = DEFAULT_CONFIDENCE_THRESHOLD; // 0.5f threshold
 
         for (int i = 0; i < Math.min(numDetections, 10); i++) {
             if (scores[i] < confidenceThreshold) {
