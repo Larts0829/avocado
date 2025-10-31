@@ -45,24 +45,30 @@ const App: React.FC = () => {
   // -----------------------------------------------------------------
   // 1. Configure native platform (splash, status bar)
   // -----------------------------------------------------------------
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      // Hide splash screen
-      SplashScreen.hide().catch((e) => {
-        console.warn('SplashScreen.hide() failed', e);
-      });
+ useEffect(() => {
+  if (Capacitor.isNativePlatform()) {
+    // Hide splash screen
+    SplashScreen.hide().catch((e) => {
+      console.warn('SplashScreen.hide() failed', e);
+    });
 
-      // Configure status bar
-      StatusBar.setStyle({ style: Style.Light }).catch((e) => {
-        console.warn('StatusBar.setStyle() failed', e);
-      });
-      
-      // Set status bar overlay to false (prevents overlap)
-      StatusBar.setOverlaysWebView({ overlay: false }).catch((e) => {
-        console.warn('StatusBar.setOverlaysWebView() failed', e);
-      });
-    }
-  }, []);
+    // Do NOT overlay (prevents overlap)
+    StatusBar.setOverlaysWebView({ overlay: false }).catch((e) => {
+      console.warn('StatusBar.setOverlaysWebView() failed', e);
+    });
+
+    // Slightly transparent (or you can use a color like #ffffff00 for fully clear)
+    StatusBar.setBackgroundColor({ color: '#00000000' }).catch((e) => {
+      console.warn('StatusBar.setBackgroundColor() failed', e);
+    });
+
+    // Light icons for dark backgrounds
+    StatusBar.setStyle({ style: Style.Light }).catch((e) => {
+      console.warn('StatusBar.setStyle() failed', e);
+    });
+  }
+}, []);
+
 
   // -----------------------------------------------------------------
   // 2. Routes (unchanged, just grouped for readability)

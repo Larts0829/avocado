@@ -33,7 +33,6 @@
   gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
-  min-height: calc(100vh - 100px);
 }
 
 .upload-left {
@@ -73,11 +72,16 @@
 }
 
 .model-selector ion-segment-button {
-  --indicator-color: #10b981;
-  --color: #718096;
+  --indicator-color: transparent;
+  --indicator-background: #10b981;
+  --indicator-box-shadow: none;
+  --color: #2d3748;
   --color-checked: white;
+  --background-checked: #10b981;
   min-height: 70px;
   font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .model-selector ion-label {
@@ -237,7 +241,7 @@
 
 .close-btn ion-icon {
   font-size: 1.5rem;
-  color: #718096;
+  color: #10b981;
 }
 
 /* Analysis Content */
@@ -371,6 +375,7 @@
   --background: #10b981;
   --background-hover: #059669;
   --background-activated: #047857;
+  --color: white;
   --border-radius: 12px;
   font-weight: 600;
   text-transform: none;

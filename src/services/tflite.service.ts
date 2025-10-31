@@ -27,15 +27,26 @@ export interface PredictionResult {
   };
 }
 
-// Confidence thresholds for different fruit classes
+// Confidence thresholds for different fruit classes - STRICT to avoid false positives
 const FRUIT_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'Healthy fruit': 0.50,
-  'scab': 0.60,
-  'anthracnose': 0.65
+  'Healthy fruit': 0.75,
+  'scab': 0.80,
+  'anthracnose': 0.80
 };
 
-// Default confidence threshold for non-fruit models
-const DEFAULT_CONFIDENCE_THRESHOLD = 0.5;
+// Confidence thresholds for leaf diseases - STRICT
+const LEAF_CONFIDENCE_THRESHOLDS: Record<string, number> = {
+  'Healthy Leaf': 0.75,
+  'Anthracnose Leaf': 0.80,
+  'Powdery Mildew': 0.80,
+  'Spider Mites': 0.80
+};
+
+// Confidence threshold for tree (borer)
+const TREE_CONFIDENCE_THRESHOLD = 0.80;
+
+// Default confidence threshold - very strict
+const DEFAULT_CONFIDENCE_THRESHOLD = 0.75;
 
 // Register the plugin
 const TFLiteNative = registerPlugin<TFLiteNativePlugin>('TFLiteNative');
@@ -46,9 +57,13 @@ const TFLiteNative = registerPlugin<TFLiteNativePlugin>('TFLiteNative');
  */
 class TFLiteService {
   private isFruitModel: boolean = false;
+  private isLeafModel: boolean = false;
+  private isTreeModel: boolean = false;
 
   constructor() {
     this.isFruitModel = false;
+    this.isLeafModel = false;
+    this.isTreeModel = false;
   }
 
   /**
@@ -62,9 +77,13 @@ class TFLiteService {
       return;
     }
 
-    // Check if this is a fruit model
+    // Determine model type
     this.isFruitModel = modelPath.includes('fruit');
-    console.log(`[TFLite] Loading ${this.isFruitModel ? 'fruit' : 'non-fruit'} model`);
+    this.isLeafModel = modelPath.includes('leaf');
+    this.isTreeModel = modelPath.includes('tree');
+    
+    const modelType = this.isFruitModel ? 'fruit' : this.isLeafModel ? 'leaf' : this.isTreeModel ? 'tree' : 'unknown';
+    console.log(`[TFLite] Loading ${modelType} model`);
 
     try {
       console.log(`[TFLite] Loading model: ${modelPath}, labels: ${labelPath}`);
@@ -142,12 +161,20 @@ class TFLiteService {
    * Checks if a prediction meets the confidence threshold
    */
   private isConfidenceSufficient(label: string, confidence: number): boolean {
+    let threshold: number;
+    
     if (this.isFruitModel) {
-      const threshold = FRUIT_CONFIDENCE_THRESHOLDS[label] || DEFAULT_CONFIDENCE_THRESHOLD;
-      console.log(`[TFLite] Checking confidence for ${label}: ${confidence} >= ${threshold}?`);
-      return confidence >= threshold;
+      threshold = FRUIT_CONFIDENCE_THRESHOLDS[label] || DEFAULT_CONFIDENCE_THRESHOLD;
+    } else if (this.isLeafModel) {
+      threshold = LEAF_CONFIDENCE_THRESHOLDS[label] || DEFAULT_CONFIDENCE_THRESHOLD;
+    } else if (this.isTreeModel) {
+      threshold = TREE_CONFIDENCE_THRESHOLD;
+    } else {
+      threshold = DEFAULT_CONFIDENCE_THRESHOLD;
     }
-    return confidence >= DEFAULT_CONFIDENCE_THRESHOLD;
+    
+    console.log(`[TFLite] Checking confidence for ${label}: ${confidence.toFixed(3)} >= ${threshold}?`);
+    return confidence >= threshold;
   }
 
   /**

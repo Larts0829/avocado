@@ -32,6 +32,10 @@ const History: React.FC = () => {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [stats, setStats] = useState({ total: 0, showing: 0 });
 
+  const capitalizeFirstLetter = (str: string): string => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   useEffect(() => {
     loadHistory();
   }, [filter]);
@@ -132,7 +136,7 @@ const History: React.FC = () => {
                         className="card-label"
                         style={{ color: getTypeColor(item.type) }}
                       >
-                        {item.label.toUpperCase()}
+                        {capitalizeFirstLetter(item.label)}
                       </span>
                     </div>
                     
@@ -194,7 +198,7 @@ const History: React.FC = () => {
                         color: getTypeColor(selectedItem.type)
                       }}
                     >
-                      {selectedItem.label}
+                      {capitalizeFirstLetter(selectedItem.label)}
                     </div>
                   </div>
 
@@ -239,6 +243,7 @@ const History: React.FC = () => {
                     <IonButton 
                       expand="block" 
                       fill="outline"
+                      color="success"
                       onClick={() => setSelectedItem(null)}
                     >
                       Close

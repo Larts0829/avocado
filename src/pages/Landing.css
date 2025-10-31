@@ -57,10 +57,10 @@
   width: calc(100% - 48px);
   max-width: 280px;
   margin: 0 24px 40px;
-  --background: #ffffff;
-  --background-hover: #f9fafb;
-  --background-activated: #f3f4f6;
-  --color: #1f2937;
+  --background: #10b981;
+  --background-hover: #059669;
+  --background-activated: #047857;
+  --color: #ffffff;
   --border-radius: 12px;
   --padding-top: 14px;
   --padding-bottom: 14px;

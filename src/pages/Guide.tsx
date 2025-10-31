@@ -48,6 +48,12 @@ const Guide: React.FC = () => {
       content:
         "Common issues and solutions: If detection fails, ensure good lighting. For poor results, retake with better focus. Clear app cache if experiencing performance issues.",
     },
+    {
+      id: "treatments",
+      title: "Treatments",
+      content:
+        "Learn about recommended treatments for detected issues. Follow expert guidance for disease management, pest control, and prevention strategies to keep your avocado plants healthy.",
+    },
   ]
 
   const toggleSection = (id: string) => {
@@ -87,6 +93,7 @@ const Guide: React.FC = () => {
                       {section.id === "upload-photos" && "📤"}
                       {section.id === "view-history" && "⏱️"}
                       {section.id === "troubleshooting" && "🔧"}
+                      {section.id === "treatments" && "💊"}
                     </div>
                     <h3>{section.title}</h3>
                   </div>

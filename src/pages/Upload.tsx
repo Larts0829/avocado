@@ -233,18 +233,22 @@ const Upload: React.FC = () => {
     setAnalysisComplete(false);
   };
 
+  const capitalizeFirstLetter = (str: string): string => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const getDiseaseStatus = (label: string): string => {
     if (label.toLowerCase().includes('healthy')) {
       return 'Healthy';
     }
-    return label;
+    return capitalizeFirstLetter(label);
   };
 
   const getDescription = (label: string): string => {
     if (label.toLowerCase().includes('healthy')) {
-      return 'The leaf appears healthy with good color and no visible signs of disease or pest damage.';
+      return 'This appears healthy with good color and no visible signs of disease or pest damage.';
     }
-    return `${label} detected on the leaf. Immediate attention may be required.`;
+    return `${capitalizeFirstLetter(label)} Immediate attention may be required.`;
   };
 
   const getRecommendations = (label: string): string[] => {
@@ -340,14 +344,7 @@ const Upload: React.FC = () => {
                 </div>
               </div>
 
-              {image && !result && (
-                <div className="upload-right processing">
-                  <div className="processing-card">
-                    <h3>Processing Image...</h3>
-                    <p>Please wait while we analyze your image</p>
-                  </div>
-                </div>
-              )}
+              {/* Removed processing card - redundant with IonLoading */}
             </div>
           ) : (
             <div className="analysis-complete">
@@ -376,7 +373,7 @@ const Upload: React.FC = () => {
                     <p className="disease-description">{getDescription(result.label)}</p>
 
                     {/* Only show recommendations if object is detected (confidence >= 0.7) */}
-                    {result && result.confidence >= 0.7 && (
+                    {result && result.confidence >= 0.2 && (
                       <div className="recommendations">
                         <h4>Recommendations</h4>
                         <div className="recommendations-list">

@@ -7,27 +7,31 @@ interface TeamMember {
   role: string
   description: string
   initials: string
+  image: string
 }
 
 const About: React.FC = () => {
   const teamMembers: TeamMember[] = [
     {
       name: "John Paul Devanadera",
-      role: "Data Scientist",
+      role: "Member",
       description: "Agricultural scientist with 15+ years of experience in crop disease detection and AI applications.",
       initials: "JP",
+      image: "/images/devanadera.jpg",
     },
     {
       name: "John Mar Vincent Lat",
-      role: "Lead Developer",
+      role: "Member",
       description: "Full-stack developer specializing in mobile applications and machine learning integration.",
       initials: "JM",
+      image: "/images/lat.jpg",
     },
     {
       name: "Irish Joanne Roxas",
-      role: "Documentator",
+      role: "Member",
       description: "Product strategist focused on creating intuitive solutions for agricultural challenges.",
       initials: "SR",
+      image: "/images/roxas.jpg",
     },
   ]
 
@@ -50,40 +54,38 @@ const About: React.FC = () => {
             <h1>
               About <span className="highlight">Snapocado</span>
             </h1>
-            <p>Revolutionizing avocado farming with AI-powered disease detection</p>
+            <p>A smart and user-friendly mobile app</p>
           </div>
 
           <div className="about-mission">
-            <h2>Our Mission</h2>
+            <h2>What We Do</h2>
             <p>
-              We're dedicated to helping avocado farmers protect their crops through cutting-edge AI technology. By
-              making disease detection accessible and affordable, we empower farmers to make informed decisions and
-              maximize their yields.
+              Snapocado is a mobile app designed to help detect avocado pests and diseases with just a snap.
             </p>
           </div>
 
-          <div className="about-features">
-            <h2>Why Choose Snapocado</h2>
-            <div className="features-grid">
-              <div className="feature-card">
-                <div className="feature-icon">🎯</div>
-                <h3>Accurate Detection</h3>
-                <p>AI-powered analysis with 95%+ accuracy</p>
+          <div className="about-vision">
+            <h2>Our Vision</h2>
+            <p>
+              We're a team of three passionate developers who share a common goal: to make technology 
+              accessible and useful for local farmers.
+            </p>
+          </div>
+
+          <div className="about-mission-statement">
+            <h2>Our Mission</h2>
+            <div className="mission-points">
+              <div className="mission-point">
+                <span className="point-icon">🎯</span>
+                <p>Empower farmers with an easy-to-use detection tool</p>
               </div>
-              <div className="feature-card">
-                <div className="feature-icon">⚡</div>
-                <h3>Instant Results</h3>
-                <p>Get analysis results in seconds</p>
+              <div className="mission-point">
+                <span className="point-icon">⚡</span>
+                <p>Save time and reduce guesswork in disease identification</p>
               </div>
-              <div className="feature-card">
-                <div className="feature-icon">📱</div>
-                <h3>Easy to Use</h3>
-                <p>Simple interface for all users</p>
-              </div>
-              <div className="feature-card">
-                <div className="feature-icon">💰</div>
-                <h3>Cost Effective</h3>
-                <p>Affordable solution for farmers</p>
+              <div className="mission-point">
+                <span className="point-icon">🌱</span>
+                <p>Promote sustainable avocado production</p>
               </div>
             </div>
           </div>
@@ -93,10 +95,9 @@ const About: React.FC = () => {
             <div className="team-grid">
               {teamMembers.map((member) => (
                 <div key={member.name} className="team-card">
-                  <div className="team-avatar">{member.initials}</div>
+                  <img src={member.image} alt={member.name} className="team-avatar-img" />
                   <h3>{member.name}</h3>
                   <p className="team-role">{member.role}</p>
-                  <p className="team-description">{member.description}</p>
                 </div>
               ))}
             </div>

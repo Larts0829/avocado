@@ -10,9 +10,16 @@ export default defineConfig({
     react(),
     legacy()
   ],
+  optimizeDeps: {
+    include: ['@ionic/react', '@ionic/react-router', '@ionic/core'],
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
     rollupOptions: {
       output: {
         manualChunks: undefined,

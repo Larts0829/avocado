@@ -28,12 +28,15 @@
 }
 
 .capture-container {
-  padding: 1rem;
+  padding: 0.75rem;
+  padding-bottom: 0.5rem;
   max-width: 500px;
   margin: 0 auto;
   height: calc(100vh - 56px);
+  height: calc(100dvh - 56px); /* Dynamic viewport height for mobile */
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   overflow: hidden;
 }
 
@@ -42,7 +45,7 @@
   background: white;
   border-radius: 8px;
   padding: 0.35rem 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   flex-shrink: 0;
 }
 
@@ -61,12 +64,17 @@
 }
 
 .model-selector ion-segment-button {
-  --indicator-color: #10b981;
-  --color: #718096;
+  --indicator-color: transparent;
+  --indicator-background: #10b981;
+  --indicator-box-shadow: none;
+  --color: #2d3748;
   --color-checked: white;
+  --background-checked: #10b981;
   min-height: 40px;
   font-weight: 600;
   font-size: 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .model-selector ion-label {
@@ -87,17 +95,16 @@
 /* Camera Area */
 .camera-area {
   background: #000;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
+  width: 100%;
   flex: 1;
-  max-height: 70vh;
-  margin-bottom: 0.75rem;
+  min-height: 0;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid #e5e7eb;
-  flex-shrink: 1;
 }
 
 .camera-placeholder {
@@ -157,6 +164,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.75rem 0;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
   gap: 1rem;
   flex-shrink: 0;
 }
@@ -175,8 +183,8 @@
 }
 
 .capture-btn {
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: white;
   border: 4px solid #10b981;
@@ -185,6 +193,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .capture-btn:active {
@@ -192,8 +201,8 @@
 }
 
 .capture-btn-inner {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: #10b981;
   display: flex;
@@ -202,7 +211,7 @@
 }
 
 .capture-btn-inner ion-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: white;
 }
 
@@ -413,6 +422,37 @@ ion-modal.ion-color-light ion-title {
 }
 
 /* Responsive adjustments */
+@media (max-height: 700px) {
+  .model-selector {
+    padding: 0.3rem 0.5rem;
+  }
+  
+  .selector-title {
+    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .capture-container {
+    padding: 0.5rem;
+    gap: 0.4rem;
+  }
+}
+
+@media (max-height: 640px) {
+  .capture-container {
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+  
+  .camera-controls {
+    padding: 0.5rem 0;
+  }
+  
+  .model-selector {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
 @media (max-width: 360px) {
   .capture-container {
     padding: 0.75rem;
@@ -420,10 +460,6 @@ ion-modal.ion-color-light ion-title {
   
   .model-selector {
     padding: 0.5rem;
-  }
-  
-  .camera-area {
-    max-height: 65vh;
   }
   
   .capture-btn {
@@ -436,3 +472,33 @@ ion-modal.ion-color-light ion-title {
     height: 52px;
   }
 }
+
+/* Additional responsive adjustments for very small screens */
+@media (max-height: 600px) {
+  .capture-container {
+    gap: 0.25rem;
+  }
+  
+  .camera-controls {
+    padding: 0.4rem 0;
+  }
+
+  .camera-placeholder p {
+    font-size: 0.875rem;
+  }
+  
+  .capture-btn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .capture-btn-inner {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .model-selector {
+    padding: 0.2rem 0.4rem;
+  }
+}
+

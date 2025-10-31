@@ -32,28 +32,44 @@ import java.util.Map;
 public class TFLiteNative extends Plugin {
 
     private static final String TAG = "TFLiteNative";
-    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.5f;
+    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.75f;
+    
+    // STRICT thresholds to avoid false positives on non-avocado images
     private static final Map<String, Float> FRUIT_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
-        put("Healthy fruit", 0.50f);
-        put("scab", 0.50f);
-        put("anthracnose", 0.60f);
-        put("borer", 0.50f);
+        put("Healthy fruit", 0.75f);
+        put("scab", 0.80f);
+        put("anthracnose", 0.80f);
     }};
+    
+    private static final Map<String, Float> LEAF_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
+        put("Healthy Leaf", 0.75f);
+        put("Anthracnose Leaf", 0.80f);
+        put("Powdery Mildew", 0.80f);
+        put("Spider Mites", 0.80f);
+    }};
+    
+    private static final float TREE_CONFIDENCE_THRESHOLD = 0.80f;
     
     private Interpreter tflite = null;
     private List<String> labels = new ArrayList<>();
     private int inputSize = 640; // Default for object detection models
     private boolean isObjectDetectionModel = true;
     private boolean isFruitModel = false;
+    private boolean isLeafModel = false;
+    private boolean isTreeModel = false;
 
     @PluginMethod
     public void loadModel(PluginCall call) {
         String modelPath = call.getString("modelPath");
         String labelPath = call.getString("labelPath");
         
-        // Check if this is a fruit model
+        // Determine model type
         isFruitModel = modelPath != null && modelPath.contains("fruit");
-        Log.d(TAG, "Loading model. isFruitModel: " + isFruitModel);
+        isLeafModel = modelPath != null && modelPath.contains("leaf");
+        isTreeModel = modelPath != null && modelPath.contains("tree");
+        
+        String modelType = isFruitModel ? "fruit" : isLeafModel ? "leaf" : isTreeModel ? "tree" : "unknown";
+        Log.d(TAG, "Loading model type: " + modelType);
 
         if (modelPath == null || labelPath == null) {
             call.reject("Model path and label path are required");
@@ -210,20 +226,27 @@ public class TFLiteNative extends Plugin {
 
                 // Get the appropriate threshold for this class
                 String detectedClass = labels.get(maxClassIndex);
-                float threshold = isFruitModel ? 
-                    FRUIT_CONFIDENCE_THRESHOLDS.getOrDefault(detectedClass, DEFAULT_CONFIDENCE_THRESHOLD) :
-                    DEFAULT_CONFIDENCE_THRESHOLD;
+                float threshold;
+                
+                if (isFruitModel) {
+                    threshold = FRUIT_CONFIDENCE_THRESHOLDS.getOrDefault(detectedClass, DEFAULT_CONFIDENCE_THRESHOLD);
+                } else if (isLeafModel) {
+                    threshold = LEAF_CONFIDENCE_THRESHOLDS.getOrDefault(detectedClass, DEFAULT_CONFIDENCE_THRESHOLD);
+                } else if (isTreeModel) {
+                    threshold = TREE_CONFIDENCE_THRESHOLD;
+                } else {
+                    threshold = DEFAULT_CONFIDENCE_THRESHOLD;
+                }
                     
-                Log.d(TAG, String.format("Detected: %s (%.2f), Threshold: %.2f", 
+                Log.d(TAG, String.format("Detected: %s (%.3f), Threshold: %.2f", 
                     detectedClass, maxConfidence, threshold));
                 
                 // Check if confidence meets threshold
                 if (maxConfidence < threshold) {
-                    Log.d(TAG, "Detection confidence " + maxConfidence + " below threshold " + threshold);
-                    JSObject result = new JSObject();
-                    result.put("label", "No object detected");
-                    result.put("confidence", 0.0f);
-                    call.resolve(result);
+                    Log.w(TAG, String.format("REJECTED: Confidence %.3f below threshold %.2f - likely not an avocado", 
+                        maxConfidence, threshold));
+                    call.reject("No avocado detected. Please capture an actual avocado leaf, fruit, or tree. Confidence: " + 
+                        String.format("%.1f%%", maxConfidence * 100));
                     return;
                 }
 

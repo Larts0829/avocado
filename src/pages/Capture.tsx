@@ -119,10 +119,6 @@ const Capture: React.FC = () => {
       const prediction = await tfliteService.predictBase64(imageData) as PredictionResult;
 
       if (prediction) {
-        // Native code handles per-class thresholds:
-        // Fruit: "Healthy fruit": 0.50, "scab": 0.50, "anthracnose": 0.60, "borer": 0.50
-        // Tree and Leaf: use default 0.5 threshold
-        
         let x = 0;
         let y = 0;
         let width = 0;
@@ -153,11 +149,21 @@ const Capture: React.FC = () => {
         setResult(result);
         setShowResultModal(true);
       } else {
-        setError('No detection results received.');
+        setImage(null);
+        setError(`No ${modelType} detected. Please ensure you are capturing an actual avocado ${modelType} with good lighting.`);
       }
     } catch (err) {
       console.error('Processing error:', err);
-      setError('Failed to process image: ' + (err as Error).message);
+      const errorMessage = (err as Error).message || 'Unknown error';
+      
+      setImage(null);
+      
+      // Check if this is a "not avocado" error from native code
+      if (errorMessage.includes('No avocado detected') || errorMessage.includes('below threshold')) {
+        setError(`❌ Not an avocado ${modelType}!\n\nPlease capture an actual avocado ${modelType}. The image you took doesn't appear to be an avocado.`);
+      } else {
+        setError('Failed to process image: ' + errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -307,7 +313,7 @@ const Capture: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="capture-content">
+      <IonContent className="capture-content" fullscreen scrollY={false}>
         <div className="capture-container">
           {/* Model Type Selector */}
           <div className="model-selector">
