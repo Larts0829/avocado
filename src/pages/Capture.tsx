@@ -71,6 +71,124 @@ function capitalizeFirstLetter(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
+// Helper function to get description based on label
+const getDescription = (label: string): string => {
+  const lowerLabel = label.toLowerCase();
+  
+  if (lowerLabel.includes('healthy')) {
+    return 'This appears healthy with good color and no visible signs of disease or pest damage.';
+  }
+  
+  if (lowerLabel.includes('scab')) {
+    return 'Scab is a fungal disease that causes dark, raised spots on fruits and leaves. An integrated management approach including sanitation, pruning, and fungicide application is essential for effective control.';
+  }
+  
+  if (lowerLabel.includes('anthracnose')) {
+    if (lowerLabel.includes('leaf')) {
+      return 'Anthracnose on leaves causes dark spots and can lead to defoliation. Pruning infected parts, improving airflow, and early fungicide application every two weeks during rainy seasons can help manage this disease.';
+    }
+    return 'Anthracnose is a fungal disease that affects fruits, causing dark lesions. Remove infected material, apply copper fungicide after blossom drop, and ensure proper post-harvest cooling at 5°C to slow disease progression.';
+  }
+  
+  if (lowerLabel.includes('powdery') || lowerLabel.includes('mildew')) {
+    return 'Powdery mildew appears as white powdery spots on leaves. Spray sulfur fungicide regularly, or use a homemade baking soda solution (1 tbsp baking soda + ½ tsp soap per gallon of water). Prune infected parts and improve air circulation.';
+  }
+  
+  if (lowerLabel.includes('mite')) {
+    return 'Persea mites are tiny pests that cause yellow spots and webbing on leaves. Release predatory mites (Neoseiulus californicus) when 50% of leaves show infestation. Avoid chemical sprays that harm beneficial mites.';
+  }
+  
+  if (lowerLabel.includes('borer')) {
+    return 'Fruit borers create holes in fruits and can cause significant crop damage. Remove and destroy infested fruits, maintain clean orchard conditions, and apply organic insecticides like neem oil or Bt every 7-10 days during fruiting.';
+  }
+  
+  return `${capitalizeFirstLetter(label)} detected. Immediate attention recommended.`;
+};
+
+// Helper function to get recommendations based on label
+const getRecommendations = (label: string): string[] => {
+  const lowerLabel = label.toLowerCase();
+  
+  if (lowerLabel.includes('healthy')) {
+    return [
+      'Continue current care routine',
+      'Monitor for any changes',
+      'Maintain proper watering schedule'
+    ];
+  }
+  
+  if (lowerLabel.includes('scab')) {
+    return [
+      'Remove and destroy infected fruits immediately',
+      'Clean up fallen leaves and debris under trees',
+      'Prune during dry periods to improve airflow',
+      'Avoid overhead watering - use drip irrigation',
+      'Apply copper-based fungicide every few weeks, especially during rainy periods',
+      'Monitor regularly for new scab spots'
+    ];
+  }
+  
+  if (lowerLabel.includes('anthracnose')) {
+    if (lowerLabel.includes('leaf')) {
+      return [
+        'Prune and remove infected leaves and twigs',
+        'Improve canopy airflow through thinning',
+        'Clean up fallen debris beneath the tree',
+        'Apply copper fungicide early and repeat every 2 weeks during rainy season',
+        'Follow label instructions and safety precautions when spraying'
+      ];
+    }
+    return [
+      'Remove dead fruits, leaves, and branches regularly',
+      'Clean up debris under the tree canopy',
+      'Prune for better airflow and reduced humidity',
+      'Apply copper fungicide every 2 weeks after blossom drop',
+      'Harvest during dry weather conditions',
+      'Cool harvested fruit immediately and store at 5°C'
+    ];
+  }
+  
+  if (lowerLabel.includes('powdery') || lowerLabel.includes('mildew')) {
+    return [
+      'Spray sulfur fungicide regularly following product label',
+      'Try homemade spray: 1 tbsp baking soda + ½ tsp liquid soap per gallon of water',
+      'Prune infected leaves and shoots - do not compost',
+      'Open canopy to improve sunlight and air circulation',
+      'Repeat treatment weekly for 3-4 weeks until resolved',
+      'Keep trees healthy with proper watering and nutrition'
+    ];
+  }
+  
+  if (lowerLabel.includes('mite')) {
+    return [
+      'Check leaves regularly for yellow spots and webbing',
+      'Release Neoseiulus californicus (predatory mites) when 50% of leaves show infestation',
+      'Release again when 75% of leaves are infested',
+      'Avoid using insecticides/miticides that harm beneficial mites',
+      'Release predatory mites annually (they don\'t survive winter)',
+      'Maintain healthy trees with proper watering and nutrition'
+    ];
+  }
+  
+  if (lowerLabel.includes('borer')) {
+    return [
+      'Collect and destroy infested fruits with holes',
+      'Remove fallen fruits and leaves around the tree',
+      'Prune regularly to improve airflow and visibility',
+      'Apply neem oil or Bt (Bacillus thuringiensis) every 7-10 days during fruiting',
+      'Consider wrapping young fruits in paper/cloth bags',
+      'Maintain continuous monitoring and sanitation'
+    ];
+  }
+  
+  return [
+    'Early intervention recommended',
+    'Monitor closely for spread',
+    'Consider consulting local agricultural extension office',
+    'Maintain good orchard sanitation'
+  ];
+};
+
 const Capture: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [modelType, setModelType] = useState<'leaf' | 'tree' | 'fruit' | ''>('leaf');
@@ -150,7 +268,7 @@ const Capture: React.FC = () => {
         setShowResultModal(true);
       } else {
         setImage(null);
-        setError(`No ${modelType} detected. Please ensure you are capturing an actual avocado ${modelType} with good lighting.`);
+        setError('No avocado found in this photo.\n\nPlease take a clear, close-up picture of the avocado leaf, fruit, or tree in good daylight.\n\nMake sure it\'s centered and not too far away.\n\nNeed help? Call the City Agriculture Office of San Pablo, Laguna at (049) 503-2229 — they\'re ready to assist you!');
       }
     } catch (err) {
       console.error('Processing error:', err);
@@ -159,8 +277,8 @@ const Capture: React.FC = () => {
       setImage(null);
       
       // Check if this is a "not avocado" error from native code
-      if (errorMessage.includes('No avocado detected') || errorMessage.includes('below threshold')) {
-        setError(`❌ Not an avocado ${modelType}!\n\nPlease capture an actual avocado ${modelType}. The image you took doesn't appear to be an avocado.`);
+      if (errorMessage.includes('No avocado detected') || errorMessage.includes('below threshold') || errorMessage.includes('No detections found')) {
+        setError('No avocado found in this photo.\n\nPlease take a clear, close-up picture of the avocado leaf, fruit, or tree in good daylight.\n\nMake sure it\'s centered and not too far away.\n\nNeed help? Call the City Agriculture Office of San Pablo, Laguna at (049) 503-2229 — they\'re ready to assist you!');
       } else {
         setError('Failed to process image: ' + errorMessage);
       }
@@ -210,20 +328,12 @@ const Capture: React.FC = () => {
       // Determine if it's Disease or Pest based on label
       const type: 'Disease' | 'Pest' = result.label.toLowerCase().includes('pest') ||
                                         result.label.toLowerCase().includes('borer') ||
-                                        result.label.toLowerCase().includes('scale') ?
+                                        result.label.toLowerCase().includes('scale') ||
+                                        result.label.toLowerCase().includes('mite') ?
                                         'Pest' : 'Disease';
 
-      // Generate description based on type
-      const description = type === 'Disease' ?
-        `${result.label} detected on ${modelType}.` :
-        `${result.label} detected.`;
-
-      // Generate recommendations
-      const recommendations = [
-        'Early intervention recommended',
-        'Monitor closely for spread',
-        'Consider biological controls'
-      ];
+      // Generate description using helper function
+      const description = getDescription(result.label);
 
       await historyService.saveToHistory({
         type,
@@ -232,7 +342,7 @@ const Capture: React.FC = () => {
         modelType,
         imageData: compressedImage,
         description,
-        recommendations
+        recommendations: getRecommendations(result.label)
       });
 
       setSuccessMessage('Saved to history successfully!');
@@ -406,28 +516,31 @@ const Capture: React.FC = () => {
                       <div className="detection-type-text">
                         {result.label.toLowerCase().includes('pest') || 
                          result.label.toLowerCase().includes('borer') || 
-                         result.label.toLowerCase().includes('scale') ? 'Pest' : 'Disease'} Detected
+                         result.label.toLowerCase().includes('scale') ||
+                         result.label.toLowerCase().includes('mite') ? 'Pest' : 'Disease'} Detected
                       </div>
                       <div className="result-label">{capitalizeFirstLetter(result.label)}</div>
                     </div>
                   </div>
                   <p className="result-date">Analyzed: {new Date().toLocaleDateString()}</p>
                   
-                  <div className="result-actions">
-                    <h4>Immediate Actions</h4>
-                    <div className="action-item">
-                      <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
-                      <span>Early intervention recommended</span>
-                    </div>
-                    <div className="action-item">
-                      <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
-                      <span>Monitor closely for spread</span>
-                    </div>
-                    <div className="action-item">
-                      <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
-                      <span>Consider biological controls</span>
-                    </div>
-                  </div>
+                  {result && (
+                    <>
+                      <div className="result-description">
+                        <p>{getDescription(result.label)}</p>
+                      </div>
+                      
+                      <div className="result-actions">
+                        <h4>Recommended Actions</h4>
+                        {getRecommendations(result.label).map((rec, index) => (
+                          <div key={index} className="action-item">
+                            <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
+                            <span>{rec}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
 
                   <div className="modal-buttons">
                     <IonButton 

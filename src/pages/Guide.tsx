@@ -52,7 +52,7 @@ const Guide: React.FC = () => {
       id: "treatments",
       title: "Treatments",
       content:
-        "Learn about recommended treatments for detected issues. Follow expert guidance for disease management, pest control, and prevention strategies to keep your avocado plants healthy.",
+        "Learn about recommended treatments for detected issues. Follow expert guidance for disease management, pest control, and prevention strategies to keep your avocado plants healthy. For assistance from the City Agriculture Office of San Pablo, Laguna, contact their hotline at (049) 503-2229.",
     },
   ]
 

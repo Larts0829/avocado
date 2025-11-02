@@ -1,40 +1,9 @@
 import type React from "react"
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons } from "@ionic/react"
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons, IonIcon } from "@ionic/react"
+import { callOutline, locationOutline, checkmarkCircleOutline } from "ionicons/icons"
 import "./About.css"
 
-interface TeamMember {
-  name: string
-  role: string
-  description: string
-  initials: string
-  image: string
-}
-
 const About: React.FC = () => {
-  const teamMembers: TeamMember[] = [
-    {
-      name: "John Paul Devanadera",
-      role: "Member",
-      description: "Agricultural scientist with 15+ years of experience in crop disease detection and AI applications.",
-      initials: "JP",
-      image: "/images/devanadera.jpg",
-    },
-    {
-      name: "John Mar Vincent Lat",
-      role: "Member",
-      description: "Full-stack developer specializing in mobile applications and machine learning integration.",
-      initials: "JM",
-      image: "/images/lat.jpg",
-    },
-    {
-      name: "Irish Joanne Roxas",
-      role: "Member",
-      description: "Product strategist focused on creating intuitive solutions for agricultural challenges.",
-      initials: "SR",
-      image: "/images/roxas.jpg",
-    },
-  ]
-
   return (
     <IonPage>
       <IonHeader>
@@ -42,7 +11,7 @@ const About: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
-          <IonTitle>About Us</IonTitle>
+          <IonTitle>About</IonTitle>
           <IonButtons slot="end">
             <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
           </IonButtons>
@@ -54,52 +23,81 @@ const About: React.FC = () => {
             <h1>
               About <span className="highlight">Snapocado</span>
             </h1>
-            <p>A smart and user-friendly mobile app</p>
+            <p className="about-subtitle">
+              Snapocado is your free, easy-to-use mobile app that helps avocado farmers detect diseases and pests — just by taking a photo.
+            </p>
+            <p className="about-subtitle-secondary">
+               Snapocado uses smart technology to scan your avocado leaves, fruits, or trees and tell you what's wrong in seconds.
+            </p>
           </div>
 
-          <div className="about-mission">
+          <div className="about-section">
             <h2>What We Do</h2>
-            <p>
-              Snapocado is a mobile app designed to help detect avocado pests and diseases with just a snap.
-            </p>
-          </div>
-
-          <div className="about-vision">
-            <h2>Our Vision</h2>
-            <p>
-              We're a team of three passionate developers who share a common goal: to make technology 
-              accessible and useful for local farmers.
-            </p>
-          </div>
-
-          <div className="about-mission-statement">
-            <h2>Our Mission</h2>
-            <div className="mission-points">
-              <div className="mission-point">
-                <span className="point-icon">🎯</span>
-                <p>Empower farmers with an easy-to-use detection tool</p>
+            <div className="feature-list">
+              <div className="feature-item">
+                <IonIcon icon={checkmarkCircleOutline} className="feature-icon" />
+                <div>
+                  <h3>Detect problems early</h3>
+                  <p>Identify issues like scab, anthracnose, mites, or borers quickly</p>
+                </div>
               </div>
-              <div className="mission-point">
-                <span className="point-icon">⚡</span>
-                <p>Save time and reduce guesswork in disease identification</p>
+              <div className="feature-item">
+                <IonIcon icon={checkmarkCircleOutline} className="feature-icon" />
+                <div>
+                  <h3>Give simple, practical advice</h3>
+                  <p>Receive step-by-step guidance on what to do next</p>
+                </div>
               </div>
-              <div className="mission-point">
-                <span className="point-icon">🌱</span>
-                <p>Promote sustainable avocado production</p>
+              <div className="feature-item">
+                <IonIcon icon={checkmarkCircleOutline} className="feature-icon" />
+                <div>
+                  <h3>Save your results</h3>
+                  <p>Track progress over time with your detection history</p>
+                </div>
+              </div>
+              <div className="feature-item">
+                <IonIcon icon={callOutline} className="feature-icon" />
+                <div>
+                  <h3>Connect you to experts</h3>
+                  <p>Call the City Agriculture Office directly from the app</p>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="team-section">
-            <h2>Our Team</h2>
-            <div className="team-grid">
-              {teamMembers.map((member) => (
-                <div key={member.name} className="team-card">
-                  <img src={member.image} alt={member.name} className="team-avatar-img" />
-                  <h3>{member.name}</h3>
-                  <p className="team-role">{member.role}</p>
+          <div className="about-section mission-section">
+            <h2>Our Mission</h2>
+            <p>
+              To help every avocado farmer in San Pablo, Laguna grow healthier trees and stronger harvests — without guesswork.
+            </p>
+            <p className="mission-belief">
+              We believe technology should be simple, free, and useful.
+            </p>
+          </div>
+
+          <div className="about-section contact-section">
+            <h2>Contact Us</h2>
+            <div className="contact-card">
+              <div className="contact-header">
+                <h3>City Agriculture Office</h3>
+                <p className="contact-subtitle">San Pablo, Laguna</p>
+              </div>
+              <div className="contact-details">
+                <div className="contact-item">
+                  <IonIcon icon={callOutline} className="contact-icon" />
+                  <div>
+                    <span className="contact-label">Phone</span>
+                    <a href="tel:+63495032229" className="contact-value">(049) 503-2229</a>
+                  </div>
                 </div>
-              ))}
+                <div className="contact-item">
+                  <IonIcon icon={locationOutline} className="contact-icon" />
+                  <div>
+                    <span className="contact-label">Location</span>
+                    <span className="contact-value">386M+VWF, San Pablo City, Laguna</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

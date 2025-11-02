@@ -27,26 +27,37 @@ export interface PredictionResult {
   };
 }
 
-// Confidence thresholds for different fruit classes - STRICT to avoid false positives
+// Fruit model labels: Healthy fruit, anthracnose, scab
+// Higher thresholds to prevent false positives when there's no avocado
 const FRUIT_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'Healthy fruit': 0.75,
-  'scab': 0.80,
-  'anthracnose': 0.80
+  'Healthy fruit': 0.55,
+  'Healthy Fruit': 0.55,
+  'scab': 0.63,
+  'Scab': 0.63,
+  'anthracnose': 0.67,
+  'Anthracnose': 0.67
 };
 
-// Confidence thresholds for leaf diseases - STRICT
+// Leaf model labels: healthy, anthracnose leaf, mites, powdery mildew
+// Lower thresholds for better detection
 const LEAF_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'Healthy Leaf': 0.75,
-  'Anthracnose Leaf': 0.80,
-  'Powdery Mildew': 0.80,
-  'Spider Mites': 0.80
+  'healthy': 0.65,
+  'Healthy': 0.65,
+  'Healthy Leaf': 0.65,
+  'anthracnose leaf': 0.55,
+  'Anthracnose Leaf': 0.55,
+  'mites': 0.55,
+  'Mites': 0.55,
+  'Spider Mites': 0.55,
+  'powdery mildew': 0.55,
+  'Powdery Mildew': 0.55
 };
 
-// Confidence threshold for tree (borer)
-const TREE_CONFIDENCE_THRESHOLD = 0.80;
+// Tree model label: borer
+const TREE_CONFIDENCE_THRESHOLD = 0.55;
 
-// Default confidence threshold - very strict
-const DEFAULT_CONFIDENCE_THRESHOLD = 0.75;
+// Default confidence threshold
+const DEFAULT_CONFIDENCE_THRESHOLD = 0.55;
 
 // Register the plugin
 const TFLiteNative = registerPlugin<TFLiteNativePlugin>('TFLiteNative');
@@ -162,11 +173,18 @@ class TFLiteService {
    */
   private isConfidenceSufficient(label: string, confidence: number): boolean {
     let threshold: number;
+    const normalizedLabel = label.toLowerCase();
     
     if (this.isFruitModel) {
-      threshold = FRUIT_CONFIDENCE_THRESHOLDS[label] || DEFAULT_CONFIDENCE_THRESHOLD;
+      // Try exact match first, then normalized
+      threshold = FRUIT_CONFIDENCE_THRESHOLDS[label] || 
+                  FRUIT_CONFIDENCE_THRESHOLDS[normalizedLabel] || 
+                  DEFAULT_CONFIDENCE_THRESHOLD;
     } else if (this.isLeafModel) {
-      threshold = LEAF_CONFIDENCE_THRESHOLDS[label] || DEFAULT_CONFIDENCE_THRESHOLD;
+      // Try exact match first, then normalized
+      threshold = LEAF_CONFIDENCE_THRESHOLDS[label] || 
+                  LEAF_CONFIDENCE_THRESHOLDS[normalizedLabel] || 
+                  DEFAULT_CONFIDENCE_THRESHOLD;
     } else if (this.isTreeModel) {
       threshold = TREE_CONFIDENCE_THRESHOLD;
     } else {

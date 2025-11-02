@@ -1,4 +1,4 @@
-Healthy Leaf
-Anthracnose Leaf
-Powdery Mildew
-Spider Mites
+healthy
+anthracnose leaf
+mites
+powdery mildew

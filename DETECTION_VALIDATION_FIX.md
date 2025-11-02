@@ -13,32 +13,34 @@ The app was incorrectly detecting avocado diseases/pests on non-avocado images:
 
 ## Solution Implemented
 
-### 1. Increased Confidence Thresholds (75-80%)
+### 1. Balanced Confidence Thresholds (60-65%)
 
 **TypeScript Service** (`src/services/tflite.service.ts`):
 ```typescript
-// STRICT thresholds to avoid false positives
+// Balanced thresholds - detect real avocados while filtering obvious false positives
 FRUIT_CONFIDENCE_THRESHOLDS = {
-  'Healthy fruit': 0.75,  // was 0.50
-  'scab': 0.80,           // was 0.70
-  'anthracnose': 0.80     // was 0.65
+  'Healthy fruit': 0.60,  // was 0.50
+  'scab': 0.65,           // was 0.70 → 0.80 → 0.65
+  'anthracnose': 0.65     // was 0.65 → 0.80 → 0.65
 }
 
 LEAF_CONFIDENCE_THRESHOLDS = {
-  'Healthy Leaf': 0.75,
-  'Anthracnose Leaf': 0.80,
-  'Powdery Mildew': 0.80,
-  'Spider Mites': 0.80
+  'Healthy Leaf': 0.60,
+  'Anthracnose Leaf': 0.65,
+  'Powdery Mildew': 0.65,
+  'Spider Mites': 0.65
 }
 
-TREE_CONFIDENCE_THRESHOLD = 0.80
-DEFAULT_CONFIDENCE_THRESHOLD = 0.75  // was 0.50
+TREE_CONFIDENCE_THRESHOLD = 0.65
+DEFAULT_CONFIDENCE_THRESHOLD = 0.60  // was 0.50 → 0.75 → 0.60
 ```
 
 **Android Native** (`android/app/src/main/java/io/ionic/avocado/TFLiteNative.java`):
-- Matched TypeScript thresholds (75-80%)
+- Matched TypeScript thresholds (60-65%)
 - Added separate thresholds for leaf, fruit, and tree models
 - Better logging for debugging
+
+**Note**: Initial attempt with 75-80% thresholds was too strict and prevented detection of real avocados. Adjusted to 60-65% for better balance.
 
 ### 2. Enhanced Error Handling
 
