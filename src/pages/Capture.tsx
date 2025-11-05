@@ -268,7 +268,7 @@ const Capture: React.FC = () => {
         setShowResultModal(true);
       } else {
         setImage(null);
-        setError('No avocado found in this photo.\n\nPlease take a clear, close-up picture of the avocado leaf, fruit, or tree in good daylight.\n\nMake sure it\'s centered and not too far away.\n\nNeed help? Call the City Agriculture Office of San Pablo, Laguna at (049) 503-2229 — they\'re ready to assist you!');
+        setError('No avocado or disease detected.');
       }
     } catch (err) {
       console.error('Processing error:', err);
@@ -278,7 +278,7 @@ const Capture: React.FC = () => {
       
       // Check if this is a "not avocado" error from native code
       if (errorMessage.includes('No avocado detected') || errorMessage.includes('below threshold') || errorMessage.includes('No detections found')) {
-        setError('No avocado found in this photo.\n\nPlease take a clear, close-up picture of the avocado leaf, fruit, or tree in good daylight.\n\nMake sure it\'s centered and not too far away.\n\nNeed help? Call the City Agriculture Office of San Pablo, Laguna at (049) 503-2229 — they\'re ready to assist you!');
+        setError('No avocado or disease detected.');
       } else {
         setError('Failed to process image: ' + errorMessage);
       }
@@ -469,10 +469,7 @@ const Capture: React.FC = () => {
                 />
               </div>
             ) : (
-              <div className="camera-placeholder">
-                <IonIcon icon={cameraOutline} className="camera-placeholder-icon" />
-                <p>Ready to capture</p>
-              </div>
+              <IonImg src="/images/instruction.png" alt="Instructions" className="instruction-image" />
             )}
           </div>
 
@@ -570,7 +567,7 @@ const Capture: React.FC = () => {
         <IonAlert
           isOpen={!!error}
           onDidDismiss={() => setError(null)}
-          header="Error"
+          header="Detection Status"
           message={error || ''}
           buttons={['OK']}
         />

@@ -30,34 +30,34 @@ export interface PredictionResult {
 // Fruit model labels: Healthy fruit, anthracnose, scab
 // Higher thresholds to prevent false positives when there's no avocado
 const FRUIT_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'Healthy fruit': 0.55,
-  'Healthy Fruit': 0.55,
-  'scab': 0.63,
-  'Scab': 0.63,
-  'anthracnose': 0.67,
-  'Anthracnose': 0.67
+  'Healthy fruit': 0.60,
+  'Healthy Fruit': 0.60,
+  'scab': 0.70,
+  'Scab': 0.70,
+  'anthracnose': 0.70,
+  'Anthracnose': 0.70
 };
 
 // Leaf model labels: healthy, anthracnose leaf, mites, powdery mildew
 // Lower thresholds for better detection
 const LEAF_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'healthy': 0.65,
-  'Healthy': 0.65,
-  'Healthy Leaf': 0.65,
-  'anthracnose leaf': 0.55,
-  'Anthracnose Leaf': 0.55,
-  'mites': 0.55,
-  'Mites': 0.55,
-  'Spider Mites': 0.55,
-  'powdery mildew': 0.55,
-  'Powdery Mildew': 0.55
+  'healthy': 0.90,
+  'Healthy': 0.90,
+  'Healthy Leaf': 0.90,
+  'anthracnose leaf': 0.60,
+  'Anthracnose Leaf': 0.60,
+  'mites': 0.60,
+  'Mites': 0.60,
+  'Spider Mites': 0.60,
+  'powdery mildew': 0.65,
+  'Powdery Mildew': 0.65
 };
 
 // Tree model label: borer
-const TREE_CONFIDENCE_THRESHOLD = 0.55;
+const TREE_CONFIDENCE_THRESHOLD = 0.50;
 
 // Default confidence threshold
-const DEFAULT_CONFIDENCE_THRESHOLD = 0.55;
+const DEFAULT_CONFIDENCE_THRESHOLD = 0.50;
 
 // Register the plugin
 const TFLiteNative = registerPlugin<TFLiteNativePlugin>('TFLiteNative');

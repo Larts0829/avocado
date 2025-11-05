@@ -32,32 +32,32 @@ import java.util.Map;
 public class TFLiteNative extends Plugin {
 
     private static final String TAG = "TFLiteNative";
-    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.55f;  // Lower default for better detection
+    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.50f;  // Lower default for better detection
     
     // Fruit model labels from fruit_labels.txt: Healthy fruit, anthracnose, scab
     // Higher thresholds to prevent false positives when there's no avocado
     private static final Map<String, Float> FRUIT_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
-        put("Healthy fruit", 0.70f);  // Raised to prevent false positives
+        put("Healthy fruit", 0.50f);  // Raised to prevent false positives
         put("scab", 0.70f);  // Raised to prevent false positives
         put("anthracnose", 0.70f);  // Raised to prevent false positives
         // Also support capitalized variations
-        put("Healthy Fruit", 0.70f);
+        put("Healthy Fruit", 0.50f);
         put("Scab", 0.70f);
         put("Anthracnose", 0.70f);
     }};
     
     // Leaf model labels from leaf_labels.txt: healthy, anthracnose leaf, mites, powdery mildew
     private static final Map<String, Float> LEAF_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
-        put("healthy", 0.50f);  // Lower threshold for healthy detection
-        put("anthracnose leaf", 0.55f);  // Lower for better detection
-        put("mites", 0.55f);  // Lower for better detection
-        put("powdery mildew", 0.55f);  // Lower for better detection
+        put("healthy", 0.90f);  // Lower threshold for healthy detection
+        put("anthracnose leaf", 0.50f);  // Lower for better detection
+        put("mites", 0.50f);  // Lower for better detection
+        put("powdery mildew", 0.50f);  // Lower for better detection
         // Also support capitalized variations for backward compatibility
-        put("Healthy", 0.50f);
-        put("Anthracnose Leaf", 0.55f);
-        put("Mites", 0.55f);
-        put("Powdery Mildew", 0.55f);
-        put("Spider Mites", 0.55f);
+        put("Healthy", 0.90f);
+        put("Anthracnose Leaf", 0.50f);
+        put("Mites", 0.50f);
+        put("Powdery Mildew", 0.50f);
+        put("Spider Mites", 0.50f);
     }};
     
     // Tree model label from tree_labels.txt: borer
