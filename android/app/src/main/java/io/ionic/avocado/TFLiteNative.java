@@ -1,5 +1,4 @@
 package io.ionic.avocado;
-
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +13,6 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.JSArray;
 
 import org.tensorflow.lite.Interpreter;
-import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,41 +30,45 @@ import java.util.Map;
 public class TFLiteNative extends Plugin {
 
     private static final String TAG = "TFLiteNative";
-    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.50f;  // Lower default for better detection
+    private static final float DEFAULT_CONFIDENCE_THRESHOLD = 0.50f;
     
     // Fruit model labels from fruit_labels.txt: Healthy fruit, anthracnose, scab
-    // Higher thresholds to prevent false positives when there's no avocado
-    private static final Map<String, Float> FRUIT_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
-        put("Healthy fruit", 0.50f);  // Raised to prevent false positives
-        put("scab", 0.70f);  // Raised to prevent false positives
-        put("anthracnose", 0.70f);  // Raised to prevent false positives
-        // Also support capitalized variations
-        put("Healthy Fruit", 0.50f);
-        put("Scab", 0.70f);
-        put("Anthracnose", 0.70f);
-    }};
+    private static final Map<String, Float> FRUIT_CONFIDENCE_THRESHOLDS;
+    static {
+        Map<String, Float> map = new HashMap<>();
+        map.put("Healthy fruit", 0.60f);
+        map.put("scab", 0.77f);
+        map.put("anthracnose", 0.70f);
+        map.put("Healthy Fruit", 0.60f);
+        map.put("Scab", 0.77f);
+        map.put("Anthracnose", 0.70f);
+        FRUIT_CONFIDENCE_THRESHOLDS = map;
+    }
     
     // Leaf model labels from leaf_labels.txt: healthy, anthracnose leaf, mites, powdery mildew
-    private static final Map<String, Float> LEAF_CONFIDENCE_THRESHOLDS = new HashMap<String, Float>() {{
-        put("healthy", 0.90f);  // Lower threshold for healthy detection
-        put("anthracnose leaf", 0.50f);  // Lower for better detection
-        put("mites", 0.50f);  // Lower for better detection
-        put("powdery mildew", 0.50f);  // Lower for better detection
-        // Also support capitalized variations for backward compatibility
-        put("Healthy", 0.90f);
-        put("Anthracnose Leaf", 0.50f);
-        put("Mites", 0.50f);
-        put("Powdery Mildew", 0.50f);
-        put("Spider Mites", 0.50f);
-    }};
+    // Lower thresholds for better detection - especially anthracnose leaf which has high mAP50 (0.851)
+    private static final Map<String, Float> LEAF_CONFIDENCE_THRESHOLDS;
+    static {
+        Map<String, Float> map = new HashMap<>();
+        map.put("healthy", 0.90f);
+        map.put("anthracnose leaf", 0.20f);  // Lowered from 0.25 to catch more detections
+        map.put("mites", 0.35f);
+        map.put("powdery mildew", 0.30f);
+        map.put("Healthy", 0.90f);
+        map.put("Healthy Leaf", 0.90f);
+        map.put("Anthracnose Leaf", 0.20f);  // Lowered from 0.25 to catch more detections
+        map.put("Mites", 0.35f);
+        map.put("Powdery Mildew", 0.30f);
+        map.put("Spider Mites", 0.35f);
+        LEAF_CONFIDENCE_THRESHOLDS = map;
+    }
     
     // Tree model label from tree_labels.txt: borer
-    private static final float TREE_CONFIDENCE_THRESHOLD = 0.55f;  // Lower for better detection
+    private static final float TREE_CONFIDENCE_THRESHOLD = 0.55f;
     
     private Interpreter tflite = null;
     private List<String> labels = new ArrayList<>();
-    private int inputSize = 640; // Default for object detection models
-    private boolean isObjectDetectionModel = true;
+    private int inputSize = 640;
     private boolean isFruitModel = false;
     private boolean isLeafModel = false;
     private boolean isTreeModel = false;
@@ -76,7 +78,6 @@ public class TFLiteNative extends Plugin {
         String modelPath = call.getString("modelPath");
         String labelPath = call.getString("labelPath");
         
-        // Determine model type
         isFruitModel = modelPath != null && modelPath.contains("fruit");
         isLeafModel = modelPath != null && modelPath.contains("leaf");
         isTreeModel = modelPath != null && modelPath.contains("tree");
@@ -92,7 +93,6 @@ public class TFLiteNative extends Plugin {
         try {
             AssetManager assetManager = getContext().getAssets();
 
-            // Prepend the public/assets path if not already present
             if (!modelPath.startsWith("public/")) {
                 modelPath = "public/assets/" + modelPath;
             }
@@ -102,24 +102,23 @@ public class TFLiteNative extends Plugin {
 
             Log.d(TAG, "Loading model: " + modelPath);
 
-            // Load model
             MappedByteBuffer modelBuffer = loadModelFile(assetManager, modelPath);
 
-            // Configure interpreter options for better performance
             Interpreter.Options options = new Interpreter.Options();
-            options.setNumThreads(4); // Use 4 threads for better performance
+            options.setNumThreads(4);
 
             tflite = new Interpreter(modelBuffer, options);
 
-            // Load labels
             labels = loadLabels(assetManager, labelPath);
 
-            // Check model input shape to determine if it's object detection or classification
             int[] inputShape = tflite.getInputTensor(0).shape();
-            inputSize = inputShape[1]; // Typically [1, height, width, 3]
+            inputSize = inputShape[1];
 
             Log.d(TAG, "Model loaded successfully. Input size: " + inputSize);
             Log.d(TAG, "Labels loaded: " + labels.size());
+            for (int i = 0; i < labels.size(); i++) {
+                Log.d(TAG, String.format("Label index %d: '%s'", i, labels.get(i)));
+            }
 
             call.resolve();
         } catch (Exception e) {
@@ -142,12 +141,10 @@ public class TFLiteNative extends Plugin {
                 return;
             }
 
-            // Remove data URL prefix if present
             if (base64Image.contains(",")) {
                 base64Image = base64Image.split(",")[1];
             }
 
-            // Decode base64 to bitmap
             byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
@@ -156,20 +153,15 @@ public class TFLiteNative extends Plugin {
                 return;
             }
 
-            // Preprocess image
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, true);
 
-            // Prepare input tensor
             ByteBuffer inputBuffer = convertBitmapToByteBuffer(scaledBitmap);
 
-            // Run inference
             Map<Integer, Object> outputs = new HashMap<>();
 
-            // Check output tensor count to determine model type
             int outputTensorCount = tflite.getOutputTensorCount();
 
             if (outputTensorCount >= 4) {
-                // Object detection model (SSD, YOLO, etc.)
                 float[][][] outputLocations = new float[1][10][4];
                 float[][] outputClasses = new float[1][10];
                 float[][] outputScores = new float[1][10];
@@ -182,7 +174,6 @@ public class TFLiteNative extends Plugin {
 
                 tflite.runForMultipleInputsOutputs(new Object[]{inputBuffer}, outputs);
 
-                // Process detections
                 JSArray detections = processDetections(
                     outputLocations[0],
                     outputClasses[0],
@@ -192,13 +183,32 @@ public class TFLiteNative extends Plugin {
                     bitmap.getHeight()
                 );
 
-                // Return first detection if available
                 if (detections.length() > 0) {
                     try {
-                        // Get the first detection from the array
-                        org.json.JSONObject jsonObj = detections.getJSONObject(0);
-                        JSObject firstDetection = JSObject.fromJSONObject(jsonObj);
-                        call.resolve(firstDetection);
+                        JSObject firstDetection = null;
+                        for (int i = 0; i < detections.length(); i++) {
+                            org.json.JSONObject jsonObj = detections.getJSONObject(i);
+                            JSObject detection = JSObject.fromJSONObject(jsonObj);
+                            String label = detection.getString("label");
+                            
+                            if (label == null || label.trim().isEmpty()) {
+                                continue;
+                            }
+                            
+                            if (isLeafModel && (label.equalsIgnoreCase("healthy") || 
+                                                label.equalsIgnoreCase("Healthy Leaf"))) {
+                                continue;
+                            }
+                            
+                            firstDetection = detection;
+                            break;
+                        }
+                        
+                        if (firstDetection != null) {
+                            call.resolve(firstDetection);
+                        } else {
+                            call.reject("No avocado or disease detected.");
+                        }
                     } catch (Exception e) {
                         call.reject("Failed to get detection result: " + e.getMessage());
                     }
@@ -207,12 +217,11 @@ public class TFLiteNative extends Plugin {
                 }
 
             } else {
-                // YOLO Detection model - output shape [1, (4+numClasses), 8400]
-                // First 4 values are box coords (x,y,w,h), rest are class scores
+                // YOLO Detection model
                 int[] outputShape = tflite.getOutputTensor(0).shape();
-                int numOutputs = outputShape[1]; // e.g. 7 = 4 box coords + 3 classes
-                int numBoxes = outputShape[2];   // e.g. 8400
-                int numClasses = numOutputs - 4; // Subtract 4 box coordinates
+                int numOutputs = outputShape[1];
+                int numBoxes = outputShape[2];
+                int numClasses = numOutputs - 4;
                 
                 Log.d(TAG, "YOLO output shape: [" + outputShape[0] + ", " + numOutputs + ", " + numBoxes + "]");
                 Log.d(TAG, "Detected " + numClasses + " classes (output=" + numOutputs + " - 4 box coords)");
@@ -220,68 +229,149 @@ public class TFLiteNative extends Plugin {
                 float[][][] output = new float[1][numOutputs][numBoxes];
                 tflite.run(inputBuffer, output);
 
-                // Find the detection with highest confidence
-                int maxClassIndex = 0;
-                float maxConfidence = 0;
-                int maxBoxIndex = 0;
-
-                for (int boxIdx = 0; boxIdx < numBoxes; boxIdx++) {
-                    // Skip first 4 values (box coordinates), check class scores
+                // First pass: Find max confidence for each class
+                // Also log sample values to understand the output format
+                float[] maxClassConfidences = new float[numClasses];
+                int[] maxClassBoxIndices = new int[numClasses];
+                
+                // Log sample raw outputs for first few boxes to debug
+                Log.d(TAG, "=== Sample Raw Outputs (first 5 boxes) ===");
+                for (int boxIdx = 0; boxIdx < Math.min(5, numBoxes); boxIdx++) {
+                    StringBuilder sb = new StringBuilder("Box " + boxIdx + ": ");
+                    sb.append("coords=[").append(output[0][0][boxIdx]).append(",")
+                      .append(output[0][1][boxIdx]).append(",")
+                      .append(output[0][2][boxIdx]).append(",")
+                      .append(output[0][3][boxIdx]).append("] ");
+                    sb.append("classes=[");
                     for (int classIdx = 0; classIdx < numClasses; classIdx++) {
-                        float confidence = output[0][4 + classIdx][boxIdx]; // Start from index 4
-                        if (confidence > maxConfidence) {
-                            maxConfidence = confidence;
-                            maxClassIndex = classIdx;
-                            maxBoxIndex = boxIdx;
+                        float conf = output[0][4 + classIdx][boxIdx];
+                        sb.append(String.format("%.3f", conf));
+                        if (classIdx < numClasses - 1) sb.append(",");
+                    }
+                    sb.append("]");
+                    Log.d(TAG, sb.toString());
+                }
+                Log.d(TAG, "==========================================");
+                
+                for (int classIdx = 0; classIdx < numClasses; classIdx++) {
+                    float maxConf = 0;
+                    int maxBoxIdx = 0;
+                    float sumConf = 0;
+                    int nonZeroCount = 0;
+                    
+                    for (int boxIdx = 0; boxIdx < numBoxes; boxIdx++) {
+                        float confidence = output[0][4 + classIdx][boxIdx];
+                        if (confidence > maxConf) {
+                            maxConf = confidence;
+                            maxBoxIdx = boxIdx;
+                        }
+                        if (confidence > 0.001f) {  // Count non-zero values
+                            sumConf += confidence;
+                            nonZeroCount++;
                         }
                     }
-                }
-
-                // Get the appropriate threshold for this class
-                String detectedClass = labels.get(maxClassIndex);
-                // Normalize label to lowercase for matching (but keep original for return value)
-                String normalizedClass = detectedClass.toLowerCase();
-                float threshold;
-                
-                if (isFruitModel) {
-                    // Try exact match first, then normalized
-                    threshold = FRUIT_CONFIDENCE_THRESHOLDS.getOrDefault(detectedClass, 
-                               FRUIT_CONFIDENCE_THRESHOLDS.getOrDefault(normalizedClass, DEFAULT_CONFIDENCE_THRESHOLD));
-                } else if (isLeafModel) {
-                    // Try exact match first, then normalized
-                    threshold = LEAF_CONFIDENCE_THRESHOLDS.getOrDefault(detectedClass,
-                               LEAF_CONFIDENCE_THRESHOLDS.getOrDefault(normalizedClass, DEFAULT_CONFIDENCE_THRESHOLD));
-                } else if (isTreeModel) {
-                    threshold = TREE_CONFIDENCE_THRESHOLD;
-                } else {
-                    threshold = DEFAULT_CONFIDENCE_THRESHOLD;
-                }
+                    maxClassConfidences[classIdx] = maxConf;
+                    maxClassBoxIndices[classIdx] = maxBoxIdx;
                     
-                Log.d(TAG, String.format("Detected: %s (%.3f), Threshold: %.2f", 
-                    detectedClass, maxConfidence, threshold));
+                    // Log statistics for each class
+                    if (isLeafModel && classIdx < labels.size()) {
+                        String labelName = labels.get(classIdx);
+                        float avgConf = nonZeroCount > 0 ? sumConf / nonZeroCount : 0;
+                        Log.d(TAG, String.format("Class %d (%s) stats: max=%.3f, avg_nonzero=%.3f, nonzero_count=%d/%d", 
+                            classIdx, labelName, maxConf, avgConf, nonZeroCount, numBoxes));
+                    }
+                }
                 
-                // Check if confidence meets threshold
-                if (maxConfidence < threshold) {
-                    Log.w(TAG, String.format("REJECTED: Confidence %.3f below threshold %.2f - likely not an avocado", 
-                        maxConfidence, threshold));
-                    call.reject("No avocado detected. Please capture an actual avocado leaf, fruit, or tree. Confidence: " + 
-                        String.format("%.1f%%", maxConfidence * 100));
+                // Enhanced logging with threshold information
+                Log.d(TAG, "=== All Class Confidences ===");
+                for (int i = 0; i < numClasses && i < labels.size(); i++) {
+                    String labelName = labels.get(i);
+                    float threshold = getThresholdForLabel(labelName);
+                    
+                    boolean meetsThreshold = maxClassConfidences[i] >= threshold;
+                    Log.d(TAG, String.format("Class %d (%s): %.3f (threshold: %.2f) %s", 
+                        i, labelName, maxClassConfidences[i], threshold, 
+                        meetsThreshold ? "✓ PASS" : "✗ FAIL"));
+                }
+                Log.d(TAG, "============================");
+
+                // Second pass: Find best class that meets threshold
+                int bestClassIndex = -1;
+                float bestConfidence = 0;
+                int bestBoxIndex = 0;
+                
+                for (int classIdx = 0; classIdx < numClasses && classIdx < labels.size(); classIdx++) {
+                    String className = labels.get(classIdx);
+                    if (className == null || className.trim().isEmpty()) {
+                        continue;
+                    }
+                    
+                    // ONLY skip healthy for leaf model
+                    if (isLeafModel && (className.equalsIgnoreCase("healthy") || 
+                                        className.equalsIgnoreCase("Healthy Leaf"))) {
+                        Log.d(TAG, String.format("Skipping healthy class: %s", className));
+                        continue;
+                    }
+                    
+                    float confidence = maxClassConfidences[classIdx];
+                    float threshold = getThresholdForLabel(className);
+                    
+                    if (isLeafModel) {
+                        Log.d(TAG, String.format("Leaf model - checking %s: conf=%.3f, thresh=%.2f", 
+                            className, confidence, threshold));
+                    }
+                    
+                    if (confidence >= threshold) {
+                        Log.d(TAG, String.format("Class %d (%s) PASSES threshold: %.3f >= %.2f", 
+                            classIdx, className, confidence, threshold));
+                        if (confidence > bestConfidence) {
+                            bestConfidence = confidence;
+                            bestClassIndex = classIdx;
+                            bestBoxIndex = maxClassBoxIndices[classIdx];
+                            Log.d(TAG, String.format("NEW BEST: %s with confidence %.3f", className, confidence));
+                        }
+                    } else {
+                        Log.d(TAG, String.format("Class %d (%s) FAILS threshold: %.3f < %.2f", 
+                            classIdx, className, confidence, threshold));
+                    }
+                }
+                
+                if (bestClassIndex == -1) {
+                    Log.w(TAG, "No class met its threshold");
+                    call.reject("No avocado or disease detected.");
+                    return;
+                }
+                
+                String detectedClass = labels.get(bestClassIndex);
+                
+                Log.d(TAG, String.format("SELECTED: Class %d (%s) with confidence %.3f", 
+                    bestClassIndex, detectedClass, bestConfidence));
+
+                String predictedLabel;
+                if (bestClassIndex < labels.size()) {
+                    predictedLabel = labels.get(bestClassIndex);
+                } else {
+                    predictedLabel = "Class " + bestClassIndex;
+                }
+                
+                if (predictedLabel == null || predictedLabel.trim().isEmpty()) {
+                    Log.w(TAG, "REJECTED: Empty/null label detected");
+                    call.reject("No avocado or disease detected.");
+                    return;
+                }
+                
+                if (isLeafModel && (predictedLabel.equalsIgnoreCase("healthy") || 
+                                    predictedLabel.equalsIgnoreCase("Healthy Leaf"))) {
+                    Log.w(TAG, "REJECTED: Healthy leaf detected");
+                    call.reject("No avocado or disease detected.");
                     return;
                 }
 
-                // Get label
-                String predictedLabel;
-                if (maxClassIndex < labels.size()) {
-                    predictedLabel = labels.get(maxClassIndex);
-                } else {
-                    predictedLabel = "Class " + maxClassIndex;
-                }
-
-                Log.d(TAG, "Best detection: class=" + maxClassIndex + " (" + predictedLabel + "), confidence=" + maxConfidence);
+                Log.d(TAG, "Best detection: class=" + bestClassIndex + " (" + predictedLabel + "), confidence=" + bestConfidence);
 
                 JSObject result = new JSObject();
                 result.put("label", predictedLabel);
-                result.put("confidence", maxConfidence);
+                result.put("confidence", bestConfidence);
                 call.resolve(result);
             }
 
@@ -305,7 +395,6 @@ public class TFLiteNative extends Plugin {
                 return;
             }
 
-            // Decode base64 to bitmap
             byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
@@ -314,24 +403,19 @@ public class TFLiteNative extends Plugin {
                 return;
             }
 
-            // Preprocess image
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, true);
 
-            // Prepare input tensor
             ByteBuffer inputBuffer = convertBitmapToByteBuffer(scaledBitmap);
 
-            // Run inference
             Map<Integer, Object> outputs = new HashMap<>();
             
-            // Check output tensor count to determine model type
             int outputTensorCount = tflite.getOutputTensorCount();
             
             if (outputTensorCount >= 4) {
-                // Object detection model (SSD, YOLO, etc.)
-                float[][][] outputLocations = new float[1][10][4]; // [batch, detections, coords]
-                float[][] outputClasses = new float[1][10]; // [batch, detections]
-                float[][] outputScores = new float[1][10]; // [batch, detections]
-                float[] numDetections = new float[1]; // [batch]
+                float[][][] outputLocations = new float[1][10][4];
+                float[][] outputClasses = new float[1][10];
+                float[][] outputScores = new float[1][10];
+                float[] numDetections = new float[1];
 
                 outputs.put(0, outputLocations);
                 outputs.put(1, outputClasses);
@@ -340,7 +424,6 @@ public class TFLiteNative extends Plugin {
 
                 tflite.runForMultipleInputsOutputs(new Object[]{inputBuffer}, outputs);
 
-                // Process detections
                 JSArray detections = processDetections(
                     outputLocations[0],
                     outputClasses[0],
@@ -355,11 +438,9 @@ public class TFLiteNative extends Plugin {
                 call.resolve(result);
 
             } else {
-                // Classification model
                 float[][] output = new float[1][labels.size()];
                 tflite.run(inputBuffer, output);
 
-                // Find the index of max confidence
                 int maxIndex = 0;
                 float maxProb = 0;
                 for (int i = 0; i < labels.size(); i++) {
@@ -383,39 +464,27 @@ public class TFLiteNative extends Plugin {
         }
     }
 
-    private Bitmap resizeAndPad(Bitmap source, int targetWidth, int targetHeight) {
-        // Calculate the aspect ratio of the source image
-        float sourceAspect = (float) source.getWidth() / source.getHeight();
-        float targetAspect = (float) targetWidth / targetHeight;
+    private float getThresholdForLabel(String labelName) {
+        Float threshold;
+        String normalizedLabel = labelName.toLowerCase();
         
-        int newWidth, newHeight;
-        int xOffset = 0, yOffset = 0;
-        
-        if (sourceAspect > targetAspect) {
-            // Source is wider than target aspect ratio
-            newWidth = targetWidth;
-            newHeight = (int) (targetWidth / sourceAspect);
-            yOffset = (targetHeight - newHeight) / 2;
+        if (isFruitModel) {
+            threshold = FRUIT_CONFIDENCE_THRESHOLDS.get(labelName);
+            if (threshold == null) {
+                threshold = FRUIT_CONFIDENCE_THRESHOLDS.get(normalizedLabel);
+            }
+        } else if (isLeafModel) {
+            threshold = LEAF_CONFIDENCE_THRESHOLDS.get(labelName);
+            if (threshold == null) {
+                threshold = LEAF_CONFIDENCE_THRESHOLDS.get(normalizedLabel);
+            }
+        } else if (isTreeModel) {
+            return TREE_CONFIDENCE_THRESHOLD;
         } else {
-            // Source is taller than target aspect ratio
-            newHeight = targetHeight;
-            newWidth = (int) (targetHeight * sourceAspect);
-            xOffset = (targetWidth - newWidth) / 2;
+            return DEFAULT_CONFIDENCE_THRESHOLD;
         }
         
-        // Create a new bitmap with the target dimensions
-        Bitmap result = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
-        android.graphics.Canvas canvas = new android.graphics.Canvas(result);
-        
-        // Fill with black (or any other color you prefer)
-        canvas.drawColor(0xFF000000);
-        
-        // Draw the resized image centered on the canvas
-        android.graphics.Rect src = new android.graphics.Rect(0, 0, source.getWidth(), source.getHeight());
-        android.graphics.RectF dst = new android.graphics.RectF(xOffset, yOffset, xOffset + newWidth, yOffset + newHeight);
-        canvas.drawBitmap(source, src, dst, null);
-        
-        return result;
+        return threshold != null ? threshold : DEFAULT_CONFIDENCE_THRESHOLD;
     }
 
     private ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap) {
@@ -429,7 +498,6 @@ public class TFLiteNative extends Plugin {
         for (int i = 0; i < inputSize; ++i) {
             for (int j = 0; j < inputSize; ++j) {
                 final int val = intValues[pixel++];
-                // Normalize pixel values to [0, 1]
                 byteBuffer.putFloat(((val >> 16) & 0xFF) / 255.0f);
                 byteBuffer.putFloat(((val >> 8) & 0xFF) / 255.0f);
                 byteBuffer.putFloat((val & 0xFF) / 255.0f);
@@ -447,11 +515,9 @@ public class TFLiteNative extends Plugin {
         int imageHeight
     ) {
         JSArray detections = new JSArray();
-        // Use the same confidence threshold as defined at class level
-        float confidenceThreshold = DEFAULT_CONFIDENCE_THRESHOLD; // 0.5f threshold
 
         for (int i = 0; i < Math.min(numDetections, 10); i++) {
-            if (scores[i] < confidenceThreshold) {
+            if (scores[i] < DEFAULT_CONFIDENCE_THRESHOLD) {
                 continue;
             }
 
@@ -463,8 +529,13 @@ public class TFLiteNative extends Plugin {
             JSObject detection = new JSObject();
             
             int classIndex = (int) classes[i];
+            String label;
             if (classIndex >= 0 && classIndex < labels.size()) {
-                detection.put("label", labels.get(classIndex));
+                label = labels.get(classIndex);
+                if (label == null || label.trim().isEmpty()) {
+                    continue;
+                }
+                detection.put("label", label);
             } else {
                 detection.put("label", "Unknown");
             }
@@ -485,26 +556,59 @@ public class TFLiteNative extends Plugin {
     }
 
     private MappedByteBuffer loadModelFile(AssetManager assetManager, String path) throws IOException {
-        try (InputStream inputStream = assetManager.open(path)) {
-            // For assets, we need to read into byte array first
+        InputStream inputStream = null;
+        try {
+            inputStream = assetManager.open(path);
             byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
+            int bytesRead = inputStream.read(bytes);
+            if (bytesRead != bytes.length) {
+                throw new IOException("Failed to read complete model file");
+            }
             
             ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
             buffer.put(bytes);
             buffer.rewind();
             
             return (MappedByteBuffer) buffer;
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to close input stream", e);
+                }
+            }
         }
     }
 
     private List<String> loadLabels(AssetManager assetManager, String labelPath) throws IOException {
         List<String> labelList = new ArrayList<>();
-        try (InputStream is = assetManager.open(labelPath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+        InputStream is = null;
+        BufferedReader reader = null;
+        try {
+            is = assetManager.open(labelPath);
+            reader = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = reader.readLine()) != null) {
-                labelList.add(line.trim());
+                String trimmed = line.trim();
+                if (!trimmed.isEmpty()) {
+                    labelList.add(trimmed);
+                }
+            }
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to close reader", e);
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to close input stream", e);
+                }
             }
         }
         Log.d(TAG, "Loaded " + labelList.size() + " labels");

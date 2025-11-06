@@ -97,7 +97,7 @@ const Upload: React.FC = () => {
     setLoading(true);
     
     try {
-      const modelFileName = modelType === 'leaf' ? 'leaf_model_holder.tflite' : `${modelType}_model.tflite`;
+      const modelFileName = modelType === 'leaf' ? 'leaf_model.tflite' : `${modelType}_model.tflite`;
       const modelPath = `models/${modelFileName}`;
       const labelPath = `models/${modelType}_labels.txt`;
       await tfliteService.loadModel(modelPath, labelPath);
@@ -334,7 +334,7 @@ const Upload: React.FC = () => {
         'Release Neoseiulus californicus (predatory mites) when 50% of leaves show infestation',
         'Release again when 75% of leaves are infested',
         'Avoid using insecticides/miticides that harm beneficial mites',
-        'Release predatory mites annually (they don\'t survive winter)',
+        'Release predatory mites annually',
         'Maintain healthy trees with proper watering and nutrition'
       ];
     }
@@ -501,7 +501,7 @@ const Upload: React.FC = () => {
         <IonAlert
           isOpen={!!error}
           onDidDismiss={() => setError(null)}
-          header={error?.includes('successfully') ? 'Success' : 'Error'}
+          header={error?.includes('No avocado or disease detected') ? 'Detection Status' : error?.includes('successfully') ? 'Success' : 'Error'}
           message={error || ''}
           buttons={['OK']}
         />

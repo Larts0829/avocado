@@ -229,7 +229,7 @@ const Capture: React.FC = () => {
     setLoading(true);
     
     try {
-      const modelFileName = modelType === 'leaf' ? 'leaf_model_holder.tflite' : `${modelType}_model.tflite`;
+      const modelFileName = modelType === 'leaf' ? 'leaf_model.tflite' : `${modelType}_model.tflite`;
       const modelPath = `models/${modelFileName}`;
       const labelPath = `models/${modelType}_labels.txt`;
       await tfliteService.loadModel(modelPath, labelPath);
@@ -567,7 +567,7 @@ const Capture: React.FC = () => {
         <IonAlert
           isOpen={!!error}
           onDidDismiss={() => setError(null)}
-          header="Detection Status"
+          header={error?.includes('No avocado or disease detected') ? 'Detection Status' : error?.includes('successfully') ? 'Success' : 'Error'}
           message={error || ''}
           buttons={['OK']}
         />

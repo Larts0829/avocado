@@ -1,7 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { registerPlugin } from '@capacitor/core';
 
-// Define the plugin interface
 interface TFLiteNativePlugin {
   loadModel(options: { modelPath: string; labelPath: string }): Promise<void>;
   runModelOnImage(options: { imageBase64: string }): Promise<{
@@ -28,38 +27,36 @@ export interface PredictionResult {
 }
 
 // Fruit model labels: Healthy fruit, anthracnose, scab
-// Higher thresholds to prevent false positives when there's no avocado
 const FRUIT_CONFIDENCE_THRESHOLDS: Record<string, number> = {
   'Healthy fruit': 0.60,
   'Healthy Fruit': 0.60,
-  'scab': 0.70,
-  'Scab': 0.70,
+  'scab': 0.77,
+  'Scab': 0.77,
   'anthracnose': 0.70,
   'Anthracnose': 0.70
 };
 
 // Leaf model labels: healthy, anthracnose leaf, mites, powdery mildew
-// Lower thresholds for better detection
+// Adjusted based on training results
 const LEAF_CONFIDENCE_THRESHOLDS: Record<string, number> = {
   'healthy': 0.90,
   'Healthy': 0.90,
   'Healthy Leaf': 0.90,
-  'anthracnose leaf': 0.60,
-  'Anthracnose Leaf': 0.60,
-  'mites': 0.60,
-  'Mites': 0.60,
-  'Spider Mites': 0.60,
-  'powdery mildew': 0.65,
-  'Powdery Mildew': 0.65
+  'anthracnose leaf': 0.20,  // Lowered to catch more detections - model has excellent mAP50 (0.851)
+  'Anthracnose Leaf': 0.20,
+  'mites': 0.35,              // Slightly lowered from 0.45f
+  'Mites': 0.35,
+  'Spider Mites': 0.35,
+  'powdery mildew': 0.30,     // Lowered - lowest mAP50 in training
+  'Powdery Mildew': 0.30
 };
 
 // Tree model label: borer
-const TREE_CONFIDENCE_THRESHOLD = 0.50;
+const TREE_CONFIDENCE_THRESHOLD = 0.55;
 
 // Default confidence threshold
-const DEFAULT_CONFIDENCE_THRESHOLD = 0.50;
+const DEFAULT_CONFIDENCE_THRESHOLD = 0.55;
 
-// Register the plugin
 const TFLiteNative = registerPlugin<TFLiteNativePlugin>('TFLiteNative');
 
 /**
@@ -88,7 +85,6 @@ class TFLiteService {
       return;
     }
 
-    // Determine model type
     this.isFruitModel = modelPath.includes('fruit');
     this.isLeafModel = modelPath.includes('leaf');
     this.isTreeModel = modelPath.includes('tree');
@@ -124,11 +120,9 @@ class TFLiteService {
             return;
           }
 
-          // Set canvas dimensions to 640x640
           canvas.width = 640;
           canvas.height = 640;
 
-          // Calculate dimensions to maintain aspect ratio
           const sourceAspect = img.width / img.height;
           let drawWidth = 640;
           let drawHeight = 640;
@@ -136,23 +130,18 @@ class TFLiteService {
           let offsetY = 0;
 
           if (sourceAspect > 1) {
-            // Image is wider than tall
             drawHeight = 640 / sourceAspect;
             offsetY = (640 - drawHeight) / 2;
           } else {
-            // Image is taller than wide or square
             drawWidth = 640 * sourceAspect;
             offsetX = (640 - drawWidth) / 2;
           }
 
-          // Fill with black background
           ctx.fillStyle = 'black';
           ctx.fillRect(0, 0, 640, 640);
 
-          // Draw the image centered
           ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 
-          // Convert back to base64
           const resizedImage = canvas.toDataURL('image/jpeg', 0.9);
           resolve(resizedImage);
         };
@@ -176,23 +165,23 @@ class TFLiteService {
     const normalizedLabel = label.toLowerCase();
     
     if (this.isFruitModel) {
-      // Try exact match first, then normalized
       threshold = FRUIT_CONFIDENCE_THRESHOLDS[label] || 
                   FRUIT_CONFIDENCE_THRESHOLDS[normalizedLabel] || 
                   DEFAULT_CONFIDENCE_THRESHOLD;
     } else if (this.isLeafModel) {
-      // Try exact match first, then normalized
       threshold = LEAF_CONFIDENCE_THRESHOLDS[label] || 
                   LEAF_CONFIDENCE_THRESHOLDS[normalizedLabel] || 
                   DEFAULT_CONFIDENCE_THRESHOLD;
+      console.log(`[TFLite] Leaf model threshold check: ${label}`);
     } else if (this.isTreeModel) {
       threshold = TREE_CONFIDENCE_THRESHOLD;
     } else {
       threshold = DEFAULT_CONFIDENCE_THRESHOLD;
     }
     
-    console.log(`[TFLite] Checking confidence for ${label}: ${confidence.toFixed(3)} >= ${threshold}?`);
-    return confidence >= threshold;
+    const passes = confidence >= threshold;
+    console.log(`[TFLite] ${label}: ${confidence.toFixed(3)} ${passes ? '≥' : '<'} ${threshold} → ${passes ? 'PASS ✓' : 'FAIL ✗'}`);
+    return passes;
   }
 
   /**
@@ -212,7 +201,6 @@ class TFLiteService {
     }
 
     try {
-      // Resize image to 640x640 before sending to native
       console.log('[TFLite] Resizing image to 640x640...');
       const resizedImage = await this.resizeImageTo640x640(imageBase64);
       
@@ -224,7 +212,6 @@ class TFLiteService {
       if (result && result.label && result.confidence !== undefined) {
         console.log(`[TFLite] Raw prediction: ${result.label} (${result.confidence})`);
         
-        // Check if confidence meets threshold
         if (!this.isConfidenceSufficient(result.label, result.confidence)) {
           console.warn(`[TFLite] Confidence ${result.confidence} below threshold`);
           return null;
@@ -243,5 +230,4 @@ class TFLiteService {
   }
 }
 
-// Export a singleton instance
 export default new TFLiteService();
