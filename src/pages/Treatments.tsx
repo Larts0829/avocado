@@ -12,66 +12,66 @@ const Treatments: React.FC = () => {
       id: 'scab',
       name: 'Scab',
       image: '/images/scab-img.jpg',
-      shortDescription: 'An integrated approach is important for managing avocado scab effectively. Using disease-resistant varieties helps reduce infection, while keeping the orchard clean by removing infected leaves, fruits, and debris prevents the spread of the fungus.',
-      fullDescription: 'Implementing an integrated approach is essential for effectively managing avocado scab. Using disease-resistant cultivars can significantly reduce the likelihood of infection and minimize the disease\'s impact on the orchard. Maintaining good orchard sanitation by removing and destroying infected plant debris, fallen leaves, and affected fruit helps eliminate potential sources of spores and prevents the spread of the disease.',
+      shortDescription: 'Mahalaga ang integrated approach para sa epektibong pamamahala ng avocado scab. Ang paggamit ng disease-resistant varieties ay tumutulong na mabawasan ang impeksyon, habang ang pagpapanatili ng malinis na orchard sa pamamagitan ng pag-alis ng apektadong dahon, prutas, at debris ay pumipigil sa pagkalat ng fungus.',
+      fullDescription: 'Ang pagpapatupad ng integrated approach ay mahalaga para sa epektibong pamamahala ng avocado scab. Ang paggamit ng disease-resistant cultivars ay makabuluhang makakabawas sa posibilidad ng impeksyon at mababawasan ang epekto ng sakit sa orchard. Ang pagpapanatili ng mabuting orchard sanitation sa pamamagitan ng pag-alis at pagwasak ng apektadong plant debris, nahulog na dahon, at apektadong prutas ay tumutulong na maalis ang mga potensyal na pinagmumulan ng spores at pumipigil sa pagkalat ng sakit.',
       steps: [
-        'Pick and throw away fruits that have scab spots. Do not leave them under the tree – bury or burn them (if allowed) to stop the disease from spreading.',
-        'Collect and remove fallen leaves, branches, and fruits under the tree. This helps get rid of fungus that causes scab.',
-        'Trim some branches so air and sunlight can pass through the tree. This keeps the area dry and less friendly for the fungus.',
-        'Do not use sprinklers that spray water on the leaves and fruits. Use drip irrigation or water at the base of the tree instead.',
-        'Use a copper-based fungicide or one advised by your local agriculture officer. Spray evenly on fruits and leaves, and repeat every few weeks, especially during rainy days.',
-        'Check your avocado fruits often for new scab spots. Remove infected ones right away to stop the spread.',
-        'Give enough water and nutrients to help the tree grow strong and resist diseases better.'
+        'Pumitas at itapon ang mga prutas na may scab spots. Huwag iwanan ang mga ito sa ilalim ng puno – ilibing o sunugin (kung pinapayagan) para mapigilan ang pagkalat ng sakit.',
+        'Kolektahin at alisin ang nahulog na dahon, sanga, at prutas sa ilalim ng puno. Tumutulong ito na maalis ang fungus na nagdudulot ng scab.',
+        'Gupitin ang ilang sanga para makadaan ang hangin at sikat ng araw sa puno. Pinapanatili nitong tuyo ang lugar at hindi kaaya-aya para sa fungus.',
+        'Huwag gumamit ng sprinklers na nag-spray ng tubig sa dahon at prutas. Gumamit ng drip irrigation o magdilig sa base ng puno sa halip.',
+        'Gumamit ng copper-based fungicide o isa na inirerekomenda ng iyong lokal na agriculture officer. Mag-spray nang pantay sa prutas at dahon, at ulitin tuwing ilang linggo, lalo na sa mga araw ng tag-ulan.',
+        'Regular na suriin ang iyong mga prutas ng abokado para sa bagong scab spots. Alisin agad ang mga apektado para mapigilan ang pagkalat.',
+        'Bigyan ng sapat na tubig at nutrients ang puno para tumulong itong lumakas at mas lumaban sa mga sakit.'
       ]
     },
     {
       id: 'anthracnose',
       name: 'Anthracnose',
       image: '/images/anthracnose-img.jpg',
-      shortDescription: 'To treat avocado anthracnose, focus on reducing spores and protecting the fruit. Remove dead fruits, leaves, and branches regularly, and clean up debris under the tree to stop the spread of the fungus.',
-      fullDescription: 'Avocado anthracnose treatment requires keeping several factors in mind at once. First, your goal is to reduce the number of anthracnose spores in and around your tree. This means removing all dead fruits, leaves, and branches at the end of the year and cleaning up any debris or dropped fruits that might accumulate underneath.',
+      shortDescription: 'Para gamutin ang avocado anthracnose, tumuon sa pagbabawas ng spores at pagprotekta sa prutas. Regular na alisin ang patay na prutas, dahon, at sanga, at linisin ang debris sa ilalim ng puno para mapigilan ang pagkalat ng fungus.',
+      fullDescription: 'Ang paggamot sa avocado anthracnose ay nangangailangan ng pagsasaalang-alang ng ilang mga kadahilanan nang sabay. Una, ang iyong layunin ay bawasan ang bilang ng anthracnose spores sa loob at palibot ng iyong puno. Nangangahulugan ito ng pag-alis ng lahat ng patay na prutas, dahon, at sanga sa katapusan ng taon at paglilinis ng anumang debris o nahulog na prutas na maaaring maipon sa ilalim.',
       steps: [
-        'Regularly collect and dispose of dead fruits, leaves, and branches from the tree.',
-        'Clear up fallen debris beneath the canopy to reduce fungal spores on the ground.',
-        'Trim branches to open the canopy – better airflow lowers humidity and reduces disease risk.',
-        'Once flowers have dropped, begin spraying a copper fungicide to protect developing fruit.',
-        'Continue copper sprays at two-week intervals throughout the fruit development period.',
-        'Pick fruits when it\'s dry to minimise contamination and spore spread.',
-        'Avoid bruising or damaging fruit (damaged fruit is more likely to get infected).',
-        'Cool harvested fruit immediately and keep in storage at about 5°C to slow disease growth.'
+        'Regular na kolektahin at itapon ang patay na prutas, dahon, at sanga mula sa puno.',
+        'Linisin ang nahulog na debris sa ilalim ng canopy para mabawasan ang fungal spores sa lupa.',
+        'Gupitin ang mga sanga para buksan ang canopy – mas mahusay na airflow ay nagpapababa ng humidity at nagbabawas ng panganib ng sakit.',
+        'Kapag nahulog na ang mga bulaklak, magsimulang mag-spray ng copper fungicide para protektahan ang umuunlad na prutas.',
+        'Ipagpatuloy ang copper sprays sa dalawang linggong pagitan sa buong panahon ng pag-unlad ng prutas.',
+        'Pumitas ng prutas kapag tuyo para mabawasan ang kontaminasyon at pagkalat ng spores.',
+        'Iwasan ang pagkasugat o pagkasira ng prutas (ang nasirang prutas ay mas malamang na ma-impeksyon).',
+        'Palamigin agad ang na-harvest na prutas at panatilihin sa storage sa humigit-kumulang 5°C para pabagalin ang paglaki ng sakit.'
       ]
     },
     {
       id: 'anthracnose-leaf',
-      name: 'Anthracnose on Leaves',
+      name: 'Anthracnose sa Dahon',
       image: '/images/anthracnose-leaf-img.jpg',
-      shortDescription: 'Pruning is important too. Cut out dead or infected leaves and twigs to improve air flow inside the tree, which helps the leaves dry faster and reduces chances for the fungus to grow.',
-      fullDescription: 'Pruning is important too. Cut out dead or infected leaves and twigs to improve air flow inside the tree, which helps the leaves dry faster and reduces chances for the fungus to grow. Make sure to clean up fallen leaves and any infected plant debris around the tree to stop the fungus from spreading. Spray early and often, starting as soon as you notice signs of the disease, and repeat applications every two weeks during the rainy season to keep the leaves healthy.',
+      shortDescription: 'Mahalaga rin ang pruning. Gupitin ang patay o apektadong dahon at twigs para mapabuti ang air flow sa loob ng puno, na tumutulong na mas mabilis matuyo ang dahon at nagbabawas ng pagkakataon na lumaki ang fungus.',
+      fullDescription: 'Mahalaga rin ang pruning. Gupitin ang patay o apektadong dahon at twigs para mapabuti ang air flow sa loob ng puno, na tumutulong na mas mabilis matuyo ang dahon at nagbabawas ng pagkakataon na lumaki ang fungus. Tiyaking linisin ang nahulog na dahon at anumang apektadong plant debris sa palibot ng puno para mapigilan ang pagkalat ng fungus. Mag-spray nang maaga at madalas, simula sa sandaling mapansin mo ang mga palatandaan ng sakit, at ulitin ang aplikasyon tuwing dalawang linggo sa panahon ng tag-ulan para panatilihing malusog ang dahon.',
       steps: [
-        'Walk around the tree and look for spots, dead or discolored leaves, and infected twigs.',
-        'Cut out dead or clearly infected leaves and twigs. Make clean cuts and remove material well away from the tree.',
-        'Thin crowded branches so air moves through the canopy – this helps leaves dry faster and reduces fungus growth.',
-        'Rake and remove fallen leaves and any infected plant material from beneath the tree. Dispose of or burn according to local rules.',
-        'As soon as you see disease signs, apply a recommended fungicide (e.g., copper fungicide) to the foliage.',
-        'Reapply every two weeks during the rainy season (or while conditions remain wet) to keep leaves protected.',
-        'Use the fungicide exactly as labeled. Wear gloves, mask, and long sleeves when spraying. Keep people and animals away until the spray has dried.',
-        'Check the tree regularly. Remove any new infected leaves quickly and continue sprays as needed.'
+        'Lakad sa palibot ng puno at hanapin ang mga spot, patay o nagbago ng kulay na dahon, at apektadong twigs.',
+        'Gupitin ang patay o malinaw na apektadong dahon at twigs. Gumawa ng malinis na hiwa at alisin ang materyal nang malayo sa puno.',
+        'Manipis ang masikip na sanga para makadaan ang hangin sa canopy – tumutulong ito na mas mabilis matuyo ang dahon at nagbabawas ng paglaki ng fungus.',
+        'Gamitin ang rake at alisin ang nahulog na dahon at anumang apektadong plant material mula sa ilalim ng puno. Itapon o sunugin ayon sa lokal na patakaran.',
+        'Sa sandaling makita mo ang mga palatandaan ng sakit, mag-apply ng inirerekomendang fungicide (hal., copper fungicide) sa foliage.',
+        'Mag-apply ulit tuwing dalawang linggo sa panahon ng tag-ulan (o habang nananatiling basa ang kondisyon) para panatilihing protektado ang dahon.',
+        'Gamitin ang fungicide nang eksakto ayon sa label. Magsuot ng guwantes, mask, at mahabang manggas kapag nag-spray. Panatilihing malayo ang mga tao at hayop hanggang matuyo ang spray.',
+        'Regular na suriin ang puno. Alisin agad ang anumang bagong apektadong dahon at ipagpatuloy ang sprays kung kinakailangan.'
       ]
     },
     {
       id: 'powdery-mildew',
       name: 'Powdery Mildew',
       image: '/images/powderymildew-img.jpg',
-      shortDescription: 'To treat powdery mildew on your avocado tree, start by spraying a mixture of sulfur fungicide regularly since it\'s effective and affordable.',
-      fullDescription: 'To treat powdery mildew on your avocado tree, start by spraying a mixture of sulfur fungicide regularly since it\'s effective and affordable. You can also try a homemade spray by mixing 1 tablespoon of baking soda and half a teaspoon of liquid soap in a gallon of water, then spray all over the leaves including the undersides. Make sure to prune any infected leaves or shoots and get rid of them so the fungus doesn\'t spread.',
+      shortDescription: 'Para gamutin ang powdery mildew sa iyong puno ng abokado, magsimula sa pamamagitan ng regular na pag-spray ng mixture ng sulfur fungicide dahil ito ay epektibo at abot-kaya.',
+      fullDescription: 'Para gamutin ang powdery mildew sa iyong puno ng abokado, magsimula sa pamamagitan ng regular na pag-spray ng mixture ng sulfur fungicide dahil ito ay epektibo at abot-kaya. Maaari mo ring subukan ang homemade spray sa pamamagitan ng paghahalo ng 1 kutsara ng baking soda at kalahating kutsarita ng liquid soap sa isang galon ng tubig, pagkatapos ay mag-spray sa lahat ng dahon kasama ang ilalim. Tiyaking gupitin ang anumang apektadong dahon o shoots at alisin ang mga ito para hindi kumalat ang fungus.',
       steps: [
-        'Use a sulfur fungicide and spray the leaves regularly (follow the product label).',
-        'Mix 1 tbsp baking soda + ½ tsp liquid soap in 1 gallon (4 L) of water. Spray all leaves, including undersides.',
-        'Cut off leaves or shoots with white powder and throw them away – do not compost.',
-        'Trim crowded branches so sunlight and air can reach the leaves.',
-        'Spray every week for 3–4 weeks or until mildew is gone.',
-        'Water and feed the tree properly – healthy trees resist disease better.',
-        'Wear gloves and a mask when spraying. Keep children and animals away until the spray dries.'
+        'Gumamit ng sulfur fungicide at mag-spray sa dahon nang regular (sundin ang product label).',
+        'Haluin ang 1 tbsp baking soda + ½ tsp liquid soap sa 1 galon (4 L) ng tubig. Mag-spray sa lahat ng dahon, kasama ang ilalim.',
+        'Gupitin ang dahon o shoots na may puting pulbos at itapon – huwag i-compost.',
+        'Gupitin ang masikip na sanga para makarating ang sikat ng araw at hangin sa dahon.',
+        'Mag-spray tuwing linggo sa loob ng 3–4 na linggo o hanggang mawala ang mildew.',
+        'Dilig at pakainin nang tama ang puno – ang malusog na puno ay mas lumalaban sa sakit.',
+        'Magsuot ng guwantes at mask kapag nag-spray. Panatilihing malayo ang mga bata at hayop hanggang matuyo ang spray.'
       ]
     }
   ];
@@ -82,33 +82,33 @@ const Treatments: React.FC = () => {
       id: 'persea-mites',
       name: 'Persea Mites (Spider Mites)',
       image: '/images/perseamites-leaf-img.jpg',
-      shortDescription: 'Research shows that heat waves and a lack of food are the main reasons for persea mite decline, with their numbers dropping by late summer. Natural predators like Neoseiulus californicus help control their population.',
-      fullDescription: 'Research shows that heat waves and a lack of food are the main reasons for persea mite decline, with their numbers dropping by late summer. High temperatures above 100°F and low humidity kill both young and adult mites, which is why inland orchards with hotter, drier conditions have fewer infestations. Natural predators like Euseius hibisci, Galendromus helveolus, and Neoseiulus californicus help control their population, with N. californicus being the most cost-effective and less damaging option.',
+      shortDescription: 'Ipinakikita ng pananaliksik na ang heat waves at kakulangan ng pagkain ang mga pangunahing dahilan ng pagbaba ng persea mite, na bumababa ang bilang sa huling bahagi ng tag-init. Ang natural na predators tulad ng Neoseiulus californicus ay tumutulong na kontrolin ang kanilang populasyon.',
+      fullDescription: 'Ipinakikita ng pananaliksik na ang heat waves at kakulangan ng pagkain ang mga pangunahing dahilan ng pagbaba ng persea mite, na bumababa ang bilang sa huling bahagi ng tag-init. Ang mataas na temperatura na higit sa 100°F at mababang humidity ay pumapatay sa parehong batang at adult na mites, kaya ang mga inland orchard na may mas mainit at mas tuyong kondisyon ay may mas kaunting infestation. Ang natural na predators tulad ng Euseius hibisci, Galendromus helveolus, at Neoseiulus californicus ay tumutulong na kontrolin ang kanilang populasyon, na ang N. californicus ay ang pinaka-cost-effective at mas hindi nakakasira na opsyon.',
       steps: [
-        'Look under the leaves for small yellow spots, fine webbing, or tiny moving dots (mites).',
-        'If about half of the leaves have mites → it\'s time to release the good mites. If around three-fourths (75%) of the leaves are infested → release again.',
-        'Use Neoseiulus californicus – it\'s the best kind and gentle to the tree. Put about 2,000 good mites per 15-foot tree.',
-        'For big orchards: Mix about 5,000 good mites per acre with a little corn grits. Sprinkle this on wet leaves early in the morning or after watering.',
-        'When the leaves dry, the good mites wake up and start eating the bad mites.',
-        'Don\'t spray insecticides or miticides after releasing good mites – they can kill them too. If you must spray, use mild ones only when needed.',
-        'Check trees regularly and release more predatory mites only when mite numbers rise back to the action thresholds (about 50% or 75% of leaves affected).',
-        'Water and feed your trees properly. Healthy trees can handle mite attacks better.',
-        'Check the leaves every week to see if the mites are going down. Write down what you see so you know what works.'
+        'Tingnan sa ilalim ng dahon para sa maliliit na dilaw na spot, pinong webbing, o maliliit na gumagalaw na tuldok (mites).',
+        'Kung humigit-kumulang kalahati ng dahon ay may mites → oras na para mag-release ng mabubuting mites. Kung humigit-kumulang tatlong-kapat (75%) ng dahon ay apektado → mag-release ulit.',
+        'Gumamit ng Neoseiulus californicus – ito ang pinakamahusay na uri at banayad sa puno. Maglagay ng humigit-kumulang 2,000 na mabubuting mites bawat 15-foot na puno.',
+        'Para sa malalaking orchard: Haluin ang humigit-kumulang 5,000 na mabubuting mites bawat acre na may kaunting corn grits. Iwisik ito sa basang dahon sa umaga o pagkatapos ng pagdidilig.',
+        'Kapag natuyo ang dahon, gigising ang mabubuting mites at magsisimulang kumain ng masasamang mites.',
+        'Huwag mag-spray ng insecticides o miticides pagkatapos mag-release ng mabubuting mites – maaari rin nilang patayin ang mga ito. Kung kailangan mong mag-spray, gumamit lamang ng banayad na uri kapag kinakailangan.',
+        'Regular na suriin ang mga puno at mag-release ng mas maraming predatory mites lamang kapag tumaas ulit ang bilang ng mites sa action thresholds (humigit-kumulang 50% o 75% ng dahon ang apektado).',
+        'Dilig at pakainin nang tama ang iyong mga puno. Ang malusog na puno ay mas nakakayanan ang atake ng mites.',
+        'Suriin ang dahon tuwing linggo para makita kung bumababa ang mites. Isulat ang iyong nakikita para malaman mo kung ano ang gumagana.'
       ]
     },
     {
       id: 'borer',
       name: 'Fruit Borers',
       image: '/images/borer-img.jpg',
-      shortDescription: 'To treat avocado fruit borers, start by collecting and destroying any infested fruits that have small holes or show signs of larvae inside to stop the insects from spreading.',
-      fullDescription: 'To treat avocado fruit borers, start by collecting and destroying any infested fruits that have small holes or show signs of larvae inside to stop the insects from spreading. Keep the area around the tree clean by removing fallen fruits and leaves, as these can harbor pests. Prune the tree regularly to improve airflow and make it easier to spot early signs of infestation.',
+      shortDescription: 'Para gamutin ang avocado fruit borers, magsimula sa pamamagitan ng pagkolekta at pagwasak ng anumang apektadong prutas na may maliliit na butas o nagpapakita ng palatandaan ng larvae sa loob para mapigilan ang pagkalat ng mga insekto.',
+      fullDescription: 'Para gamutin ang avocado fruit borers, magsimula sa pamamagitan ng pagkolekta at pagwasak ng anumang apektadong prutas na may maliliit na butas o nagpapakita ng palatandaan ng larvae sa loob para mapigilan ang pagkalat ng mga insekto. Panatilihing malinis ang lugar sa palibot ng puno sa pamamagitan ng pag-alis ng nahulog na prutas at dahon, dahil maaaring magtago ang mga peste dito. Regular na mag-prune ng puno para mapabuti ang airflow at mas madaling makita ang maagang palatandaan ng infestation.',
       steps: [
-        'Collect and destroy any infested fruits that have small holes or show signs of larvae inside to stop the insects from spreading.',
-        'Keep the area around the tree clean by removing fallen fruits and leaves, as these can harbor pests.',
-        'Prune the tree regularly to improve airflow and make it easier to spot early signs of infestation.',
-        'During the fruiting stage, spray organic insecticides like neem oil or Bacillus thuringiensis (Bt) every 7 to 10 days to kill larvae and repel adult moths.',
-        'You can also wrap young fruits in paper or cloth bags to prevent borers from laying eggs.',
-        'Continuously monitor, maintain proper sanitation, and regular spraying help keep avocado fruit borers under control and protect your harvest.'
+        'Kolektahin at sirain ang anumang apektadong prutas na may maliliit na butas o nagpapakita ng palatandaan ng larvae sa loob para mapigilan ang pagkalat ng mga insekto.',
+        'Panatilihing malinis ang lugar sa palibot ng puno sa pamamagitan ng pag-alis ng nahulog na prutas at dahon, dahil maaaring magtago ang mga peste dito.',
+        'Regular na mag-prune ng puno para mapabuti ang airflow at mas madaling makita ang maagang palatandaan ng infestation.',
+        'Sa panahon ng fruiting stage, mag-spray ng organic insecticides tulad ng neem oil o Bacillus thuringiensis (Bt) tuwing 7 hanggang 10 araw para patayin ang larvae at itaboy ang adult moths.',
+        'Maaari mo ring balutin ang batang prutas sa paper o cloth bags para pigilan ang borers na mangitlog.',
+        'Tuloy-tuloy na monitoring, pagpapanatili ng tamang sanitation, at regular na pag-spray ay tumutulong na panatilihing kontrolado ang avocado fruit borers at protektahan ang iyong ani.'
       ]
     }
   ];
@@ -126,11 +126,11 @@ const Treatments: React.FC = () => {
         <IonAccordionGroup>
           <IonAccordion value={`details-${treatment.id}`}>
             <IonItem slot="header">
-              <IonLabel>Full Treatment Guide</IonLabel>
+              <IonLabel>Buong Gabay sa Gamot</IonLabel>
             </IonItem>
             <div className="ion-padding" slot="content">
               <p className="treatment-full-description">{treatment.fullDescription}</p>
-              <h4 className="steps-title">Step-by-Step Treatment Guide</h4>
+              <h4 className="steps-title">Step-by-Step na Gabay sa Gamot</h4>
               <ol className="treatment-steps">
                 {treatment.steps.map((step, index) => (
                   <li key={index}>{step}</li>
@@ -150,7 +150,7 @@ const Treatments: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
-          <IonTitle>Treatments</IonTitle>
+          <IonTitle>Gamot</IonTitle>
           <IonButtons slot="end">
             <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
           </IonButtons>
@@ -164,22 +164,22 @@ const Treatments: React.FC = () => {
               onClick={() => setSelectedCategory('diseases')}
             >
               <IonIcon icon={medicalOutline} />
-              <span>Diseases</span>
+              <span>Mga Sakit</span>
             </button>
             <button
               className={`category-btn ${selectedCategory === 'pests' ? 'active' : ''}`}
               onClick={() => setSelectedCategory('pests')}
             >
               <IonIcon icon={bugOutline} />
-              <span>Pests</span>
+              <span>Mga Peste</span>
             </button>
           </div>
 
           {selectedCategory === 'diseases' && (
             <div className="treatments-section">
-              <h2 className="section-title">Disease Treatments</h2>
+              <h2 className="section-title">Gamot sa Mga Sakit</h2>
               <p className="section-description">
-                Comprehensive treatment guides for common avocado diseases. Follow the step-by-step instructions for effective management.
+                Komprehensibong gabay sa gamot para sa karaniwang sakit ng abokado. Sundin ang step-by-step na instruksyon para sa epektibong pamamahala.
               </p>
               <div className="treatments-grid">
                 {diseases.map(treatment => renderTreatmentCard(treatment))}
@@ -189,9 +189,9 @@ const Treatments: React.FC = () => {
 
           {selectedCategory === 'pests' && (
             <div className="treatments-section">
-              <h2 className="section-title">Pest Management</h2>
+              <h2 className="section-title">Pamamahala sa Mga Peste</h2>
               <p className="section-description">
-                Integrated pest management strategies for common avocado pests. Use biological controls when possible for sustainable solutions.
+                Integrated pest management strategies para sa karaniwang peste ng abokado. Gumamit ng biological controls kung maaari para sa sustainable na solusyon.
               </p>
               <div className="treatments-grid">
                 {pests.map(treatment => renderTreatmentCard(treatment))}

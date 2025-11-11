@@ -22,10 +22,10 @@ const Landing: React.FC = () => {
               <img src="/images/logo_snapocado.png" alt="Snapocado" className="logo" />
             </div>
             <h1 className="app-title">Snapocado</h1>
-            <p className="app-subtitle">Snap. Detect. Protect.</p>
+            <p className="app-subtitle">Kumuha. Makita. Protektahan.</p>
           </div>
           <IonButton expand="block" className="start-button" onClick={handleStart}>
-            Start
+            Magsimula
           </IonButton>
         </div>
       </IonContent>

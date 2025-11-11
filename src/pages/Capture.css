@@ -92,19 +92,34 @@
   font-size: 0.7rem;
 }
 
+/* Instruction Text */
+.instruction-text {
+  text-align: center;
+  margin: 0.5rem 0;
+  flex-shrink: 0;
+}
+
+.instruction-main {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+}
+
 /* Camera Area */
 .camera-area {
   background: transparent;
   border-radius: 16px;
   overflow: hidden;
   width: 100%;
-  flex: 1;
-  min-height: 0;
+  height: 260px;
+  max-height: 260px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
+  flex-shrink: 0;
 }
 
 .camera-placeholder {
@@ -141,11 +156,15 @@
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .captured-image {
   width: 100%;
   height: 100%;
+  max-height: 100%;
   object-fit: contain;
 }
 
@@ -162,8 +181,10 @@
 .instruction-image {
   width: 100%;
   height: 100%;
+  max-height: 100%;
   object-fit: contain;
   background: transparent;
+  padding: 12px;
 }
 
 /* Camera Controls */
@@ -171,8 +192,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 0;
-  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  padding: 1rem 0;
   gap: 1rem;
   flex-shrink: 0;
 }
@@ -191,8 +211,8 @@
 }
 
 .capture-btn {
-  width: 68px;
-  height: 68px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: white;
   border: 4px solid #10b981;
@@ -202,6 +222,7 @@
   cursor: pointer;
   transition: all 0.2s;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .capture-btn:active {
@@ -209,8 +230,8 @@
 }
 
 .capture-btn-inner {
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: #10b981;
   display: flex;
@@ -219,9 +240,10 @@
 }
 
 .capture-btn-inner ion-icon {
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: white;
 }
+
 
 /* Capture Tips */
 .capture-tips {
@@ -528,13 +550,13 @@ ion-modal.ion-color-light ion-title {
   }
   
   .capture-btn {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
   }
 
   .capture-btn-inner {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
   }
   
   .model-selector {

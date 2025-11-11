@@ -4,14 +4,14 @@ import type React from "react"
 
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons } from "@ionic/react"
 import { useState } from "react"
-import { chevronDownOutline, chevronUpOutline } from "ionicons/icons"
+import { chevronDownOutline, chevronUpOutline, rocketOutline, cameraOutline, cloudUploadOutline, timeOutline, constructOutline, medicalOutline } from "ionicons/icons"
 import { IonIcon } from "@ionic/react"
 import "./Guide.css"
 
 interface GuideSection {
   id: string
   title: string
-  content: string
+  content: React.ReactNode // Changed to React.ReactNode to support JSX
 }
 
 const Guide: React.FC = () => {
@@ -20,39 +20,47 @@ const Guide: React.FC = () => {
   const sections: GuideSection[] = [
     {
       id: "getting-started",
-      title: "Getting Started",
+      title: "Paano Magsimula",
       content:
-        "Learn the basics of Snapocado. Start by taking a photo of your avocado plant or fruit. Our AI will analyze the image and provide disease detection results within seconds.",
+        "Matuto ng mga basic ng Snapocado. Magsimula sa pamamagitan ng pagkuha ng larawan ng iyong halaman o prutas ng abokado. A-analyze ng aming AI ang larawan at magbibigay ng disease detection results sa loob ng ilang segundo.",
     },
     {
       id: "camera-capture",
-      title: "Camera Capture",
+      title: "Kumuha ng Larawan",
       content:
-        "Take photos for instant analysis. Ensure good lighting and focus on the affected area. You can retake photos until you're satisfied with the quality.",
+        "Kumuha ng mga larawan para sa instant analysis. Tiyaking may magandang liwanag at i-focus ang apektadong lugar. Maaari kang muling kumuha ng larawan hanggang masiyahan ka sa kalidad.",
     },
     {
       id: "upload-photos",
-      title: "Upload Photos",
+      title: "Mag-upload ng Larawan",
       content:
-        "Upload existing photos from your gallery. Supported formats include JPG, PNG, and HEIC. Photos should be clear and well-lit for best results.",
+        "Mag-upload ng umiiral na mga larawan mula sa iyong gallery. Kasama sa supported formats ang JPG, PNG, at HEIC. Dapat malinaw at may magandang liwanag ang mga larawan para sa pinakamahusay na resulta.",
     },
     {
       id: "view-history",
-      title: "View History",
+      title: "Tingnan ang Kasaysayan",
       content:
-        "Track your analysis results. Access your saved detections, review past analyses, and monitor disease progression over time.",
+        "Subaybayan ang iyong mga resulta ng analysis. I-access ang iyong na-save na detections, suriin ang nakaraang analyses, at subaybayan ang paglala ng sakit sa paglipas ng panahon.",
     },
     {
       id: "troubleshooting",
-      title: "Troubleshooting",
+      title: "Pagtroubleshoot",
       content:
-        "Common issues and solutions: If detection fails, ensure good lighting. For poor results, retake with better focus. Clear app cache if experiencing performance issues.",
+        "Karaniwang mga isyu at solusyon: Kung nabigo ang detection, tiyaking may magandang liwanag. Para sa mahinang resulta, muling kumuha na may mas mahusay na focus. Linisin ang app cache kung nakakaranas ng performance issues.",
     },
     {
       id: "treatments",
-      title: "Treatments",
-      content:
-        "Learn about recommended treatments for detected issues. Follow expert guidance for disease management, pest control, and prevention strategies to keep your avocado plants healthy. For assistance from the City Agriculture Office of San Pablo, Laguna, contact their hotline at (049) 503-2229.",
+      title: "Gamot",
+      content: (
+        <>
+          Matuto tungkol sa inirerekomendang gamot para sa nakita na mga isyu. Sundin ang gabay ng eksperto para sa disease management, pest control, at prevention strategies upang panatilihing malusog ang iyong mga halaman ng abokado.{" "}
+          Para sa tulong mula sa <strong>City Agriculture Office ng San Pablo, Laguna</strong>, makipag-ugnayan sa kanilang hotline sa{" "}
+          <a href="tel:+63495032229" className="hotline-link">
+            (049) 503-2229
+          </a>
+          .
+        </>
+      ),
     },
   ]
 
@@ -67,7 +75,7 @@ const Guide: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
-          <IonTitle>User Guide</IonTitle>
+          <IonTitle>Gabay</IonTitle>
           <IonButtons slot="end">
             <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
           </IonButtons>
@@ -77,9 +85,9 @@ const Guide: React.FC = () => {
         <div className="guide-container">
           <div className="guide-header">
             <h1>
-              How to Use <span className="highlight">Snapocado</span>
+              Paano Gamitin ang <span className="highlight">Snapocado</span>
             </h1>
-            <p>Everything you need to know about using our app</p>
+            <p>Lahat ng kailangan mong malaman tungkol sa paggamit ng aming app</p>
           </div>
 
           <div className="guide-sections">
@@ -88,12 +96,12 @@ const Guide: React.FC = () => {
                 <button className="section-header" onClick={() => toggleSection(section.id)}>
                   <div className="section-title-wrapper">
                     <div className="section-icon">
-                      {section.id === "getting-started" && "🚀"}
-                      {section.id === "camera-capture" && "📷"}
-                      {section.id === "upload-photos" && "📤"}
-                      {section.id === "view-history" && "⏱️"}
-                      {section.id === "troubleshooting" && "🔧"}
-                      {section.id === "treatments" && "💊"}
+                      {section.id === "getting-started" && <IonIcon icon={rocketOutline} />}
+                      {section.id === "camera-capture" && <IonIcon icon={cameraOutline} />}
+                      {section.id === "upload-photos" && <IonIcon icon={cloudUploadOutline} />}
+                      {section.id === "view-history" && <IonIcon icon={timeOutline} />}
+                      {section.id === "troubleshooting" && <IonIcon icon={constructOutline} />}
+                      {section.id === "treatments" && <IonIcon icon={medicalOutline} />}
                     </div>
                     <h3>{section.title}</h3>
                   </div>
@@ -104,7 +112,7 @@ const Guide: React.FC = () => {
                 </button>
                 {expandedId === section.id && (
                   <div className="section-content">
-                    <p>{section.content}</p>
+                    {typeof section.content === "string" ? <p>{section.content}</p> : section.content}
                   </div>
                 )}
               </div>

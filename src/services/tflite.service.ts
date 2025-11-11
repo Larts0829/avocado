@@ -37,18 +37,18 @@ const FRUIT_CONFIDENCE_THRESHOLDS: Record<string, number> = {
 };
 
 // Leaf model labels: healthy, anthracnose leaf, mites, powdery mildew
-// Adjusted based on training results
+// Lowered thresholds for better field detection
 const LEAF_CONFIDENCE_THRESHOLDS: Record<string, number> = {
   'healthy': 0.90,
   'Healthy': 0.90,
   'Healthy Leaf': 0.90,
-  'anthracnose leaf': 0.20,  // Lowered to catch more detections - model has excellent mAP50 (0.851)
-  'Anthracnose Leaf': 0.20,
-  'mites': 0.35,              // Slightly lowered from 0.45f
-  'Mites': 0.35,
-  'Spider Mites': 0.35,
-  'powdery mildew': 0.30,     // Lowered - lowest mAP50 in training
-  'Powdery Mildew': 0.30
+  'anthracnose leaf': 0.15,  // Further lowered for better field detection
+  'Anthracnose Leaf': 0.15,
+  'mites': 0.12,              // Lowered for better detection
+  'Mites': 0.12,
+  'Spider Mites': 0.12,
+  'powdery mildew': 0.25,     // Lowered for better detection
+  'Powdery Mildew': 0.25
 };
 
 // Tree model label: borer

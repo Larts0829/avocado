@@ -78,7 +78,7 @@ const History: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
-          <IonTitle>History</IonTitle>
+          <IonTitle>Nakaraang Resulta</IonTitle>
           <IonButtons slot="end">
             <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" style={{marginRight: '8px'}} />
             <IonButton onClick={() => setShowClearConfirm(true)}>
@@ -93,18 +93,18 @@ const History: React.FC = () => {
           {/* Stats Cards */}
           <div className="stats-row">
             <div className="stat-card">
-              <div className="stat-label">Total Scans</div>
+              <div className="stat-label">Kabuuang Scans</div>
               <div className="stat-value">{stats.total}</div>
             </div>
             <div className="stat-card">
-              <div className="stat-label">Showing</div>
+              <div className="stat-label">Ipinapakita</div>
               <div className="stat-value">{stats.showing}</div>
             </div>
           </div>
 
           {/* Filter Section */}
           <div className="filter-section">
-            <h3 className="section-title">Recent</h3>
+            <h3 className="section-title">Kamakailan</h3>
             <button className="filter-btn" onClick={() => setShowFilterSheet(true)}>
               <IonIcon icon={funnelOutline} />
               <span>Filter</span>
@@ -115,8 +115,8 @@ const History: React.FC = () => {
           <div className="history-list">
             {history.length === 0 ? (
               <div className="empty-state">
-                <p>No scan history yet</p>
-                <p className="empty-subtitle">Start capturing to see your results here</p>
+                <p>Walang scan history pa</p>
+                <p className="empty-subtitle">Magsimulang kumuha para makita ang iyong mga resulta dito</p>
               </div>
             ) : (
               history.map((item) => (
@@ -169,7 +169,7 @@ const History: React.FC = () => {
             <IonPage>
               <IonHeader>
                 <IonToolbar>
-                  <IonTitle>Details</IonTitle>
+                  <IonTitle>Mga Detalye</IonTitle>
                   <IonButtons slot="end">
                     <IonButton onClick={() => setSelectedItem(null)}>
                       <IonIcon icon={closeOutline} />
@@ -189,7 +189,7 @@ const History: React.FC = () => {
                   <div className="detail-header">
                     <div className="detection-type-label">
                       <IonIcon icon={checkmarkCircleOutline} className="detection-icon" />
-                      <span>{selectedItem.type} Detected</span>
+                      <span>{selectedItem.type === 'Disease' ? 'Sakit' : 'Peste'} Nakita</span>
                     </div>
                     <div 
                       className="detail-label-badge"
@@ -204,21 +204,21 @@ const History: React.FC = () => {
 
                   {/* Disease Analysis */}
                   <div className="detail-section">
-                    <h3>Disease Analysis</h3>
+                    <h3>Analysis ng Sakit</h3>
                     <p>{selectedItem.description}</p>
                     
                     <div className="detail-meta-row">
                       <div className="detail-meta-item">
                         <IonIcon icon={calendarOutline} />
                         <div>
-                          <div className="meta-label">Date</div>
+                          <div className="meta-label">Petsa</div>
                           <div className="meta-value">{selectedItem.date}</div>
                         </div>
                       </div>
                       <div className="detail-meta-item">
                         <IonIcon icon={timeOutline} />
                         <div>
-                          <div className="meta-label">Time</div>
+                          <div className="meta-label">Oras</div>
                           <div className="meta-value">{selectedItem.time}</div>
                         </div>
                       </div>
@@ -227,7 +227,7 @@ const History: React.FC = () => {
 
                   {/* Recommendations */}
                   <div className="detail-section">
-                    <h3>Recommendations</h3>
+                    <h3>Mga Rekomendasyon</h3>
                     <div className="recommendations-list">
                       {selectedItem.recommendations.map((rec, index) => (
                         <div key={index} className="recommendation-item">
@@ -246,7 +246,7 @@ const History: React.FC = () => {
                       color="success"
                       onClick={() => setSelectedItem(null)}
                     >
-                      Close
+                      Isara
                     </IonButton>
                     <IonButton 
                       expand="block" 
@@ -256,7 +256,7 @@ const History: React.FC = () => {
                         setSelectedItem(null);
                       }}
                     >
-                      Delete
+                      Tanggalin
                     </IonButton>
                   </div>
                 </div>
@@ -269,22 +269,22 @@ const History: React.FC = () => {
         <IonActionSheet
           isOpen={showFilterSheet}
           onDidDismiss={() => setShowFilterSheet(false)}
-          header="Filter by Type"
+          header="Filter ayon sa Uri"
           buttons={[
             {
-              text: 'All',
+              text: 'Lahat',
               handler: () => setFilter('all')
             },
             {
-              text: 'Disease Only',
+              text: 'Sakit Lamang',
               handler: () => setFilter('Disease')
             },
             {
-              text: 'Pest Only',
+              text: 'Peste Lamang',
               handler: () => setFilter('Pest')
             },
             {
-              text: 'Cancel',
+              text: 'Kanselahin',
               role: 'cancel'
             }
           ]}
@@ -294,16 +294,16 @@ const History: React.FC = () => {
         <IonActionSheet
           isOpen={showClearConfirm}
           onDidDismiss={() => setShowClearConfirm(false)}
-          header="Clear all history?"
-          subHeader="This action cannot be undone"
+          header="Linisin ang lahat ng history?"
+          subHeader="Hindi na mababalik ang aksyon na ito"
           buttons={[
             {
-              text: 'Clear All',
+              text: 'Linisin Lahat',
               role: 'destructive',
               handler: handleClearHistory
             },
             {
-              text: 'Cancel',
+              text: 'Kanselahin',
               role: 'cancel'
             }
           ]}

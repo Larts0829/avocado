@@ -76,33 +76,33 @@ const getDescription = (label: string): string => {
   const lowerLabel = label.toLowerCase();
   
   if (lowerLabel.includes('healthy')) {
-    return 'This appears healthy with good color and no visible signs of disease or pest damage.';
+    return 'Mukhang malusog ito na may magandang kulay at walang nakikitang palatandaan ng sakit o pinsala mula sa peste.';
   }
   
   if (lowerLabel.includes('scab')) {
-    return 'Scab is a fungal disease that causes dark, raised spots on fruits and leaves. An integrated management approach including sanitation, pruning, and fungicide application is essential for effective control.';
+    return 'Ang scab ay isang fungal disease na nagdudulot ng madilim at nakataas na mga spot sa prutas at dahon. Mahalaga ang integrated management approach na kasama ang sanitation, pruning, at fungicide application para sa epektibong kontrol.';
   }
   
   if (lowerLabel.includes('anthracnose')) {
     if (lowerLabel.includes('leaf')) {
-      return 'Anthracnose on leaves causes dark spots and can lead to defoliation. Pruning infected parts, improving airflow, and early fungicide application every two weeks during rainy seasons can help manage this disease.';
+      return 'Ang anthracnose sa dahon ay nagdudulot ng madilim na spot at maaaring magdulot ng pagkalagas ng dahon. Ang pruning ng apektadong bahagi, pagpapabuti ng airflow, at maagang paggamit ng fungicide tuwing dalawang linggo sa panahon ng tag-ulan ay makakatulong sa pag-manage ng sakit na ito.';
     }
-    return 'Anthracnose is a fungal disease that affects fruits, causing dark lesions. Remove infected material, apply copper fungicide after blossom drop, and ensure proper post-harvest cooling at 5°C to slow disease progression.';
+    return 'Ang anthracnose ay isang fungal disease na umaapekto sa prutas, na nagdudulot ng madilim na lesyon. Alisin ang apektadong materyal, mag-apply ng copper fungicide pagkatapos ng blossom drop, at tiyakin ang tamang post-harvest cooling sa 5°C para pabagalin ang paglala ng sakit.';
   }
   
   if (lowerLabel.includes('powdery') || lowerLabel.includes('mildew')) {
-    return 'Powdery mildew appears as white powdery spots on leaves. Spray sulfur fungicide regularly, or use a homemade baking soda solution (1 tbsp baking soda + ½ tsp soap per gallon of water). Prune infected parts and improve air circulation.';
+    return 'Ang powdery mildew ay lumilitaw bilang puting pulbos na spot sa dahon. Mag-spray ng sulfur fungicide nang regular, o gumamit ng homemade baking soda solution (1 tbsp baking soda + ½ tsp soap bawat galon ng tubig). Prune ang apektadong bahagi at pagbutihin ang air circulation.';
   }
   
   if (lowerLabel.includes('mite')) {
-    return 'Persea mites are tiny pests that cause yellow spots and webbing on leaves. Release predatory mites (Neoseiulus californicus) when 50% of leaves show infestation. Avoid chemical sprays that harm beneficial mites.';
+    return 'Ang persea mites ay maliliit na peste na nagdudulot ng dilaw na spot at webbing sa dahon. Mag-release ng predatory mites (Neoseiulus californicus) kapag 50% ng dahon ay may infestation. Iwasan ang chemical sprays na nakakasira sa beneficial mites.';
   }
   
   if (lowerLabel.includes('borer')) {
-    return 'Fruit borers create holes in fruits and can cause significant crop damage. Remove and destroy infested fruits, maintain clean orchard conditions, and apply organic insecticides like neem oil or Bt every 7-10 days during fruiting.';
+    return 'Ang fruit borers ay gumagawa ng butas sa prutas at maaaring magdulot ng malaking pinsala sa ani. Alisin at sirain ang apektadong prutas, panatilihin ang malinis na kondisyon ng orchard, at mag-apply ng organic insecticides tulad ng neem oil o Bt tuwing 7-10 araw sa panahon ng fruiting.';
   }
   
-  return `${capitalizeFirstLetter(label)} detected. Immediate attention recommended.`;
+  return `Nakita ang ${capitalizeFirstLetter(label)}. Inirerekomenda ang agarang atensyon.`;
 };
 
 // Helper function to get recommendations based on label
@@ -111,81 +111,81 @@ const getRecommendations = (label: string): string[] => {
   
   if (lowerLabel.includes('healthy')) {
     return [
-      'Continue current care routine',
-      'Monitor for any changes',
-      'Maintain proper watering schedule'
+      'Ipagpatuloy ang kasalukuyang care routine',
+      'Subaybayan ang anumang pagbabago',
+      'Panatilihin ang tamang watering schedule'
     ];
   }
   
   if (lowerLabel.includes('scab')) {
     return [
-      'Remove and destroy infected fruits immediately',
-      'Clean up fallen leaves and debris under trees',
-      'Prune during dry periods to improve airflow',
-      'Avoid overhead watering - use drip irrigation',
-      'Apply copper-based fungicide every few weeks, especially during rainy periods',
-      'Monitor regularly for new scab spots'
+      'Alisin at sirain agad ang apektadong prutas',
+      'Linisin ang nahulog na dahon at debris sa ilalim ng puno',
+      'Mag-prune sa tuyong panahon para mapabuti ang airflow',
+      'Iwasan ang overhead watering - gumamit ng drip irrigation',
+      'Mag-apply ng copper-based fungicide tuwing ilang linggo, lalo na sa panahon ng tag-ulan',
+      'Regular na subaybayan para sa bagong scab spots'
     ];
   }
   
   if (lowerLabel.includes('anthracnose')) {
     if (lowerLabel.includes('leaf')) {
       return [
-        'Prune and remove infected leaves and twigs',
-        'Improve canopy airflow through thinning',
-        'Clean up fallen debris beneath the tree',
-        'Apply copper fungicide early and repeat every 2 weeks during rainy season',
-        'Follow label instructions and safety precautions when spraying'
+        'Prune at alisin ang apektadong dahon at twigs',
+        'Pagbutihin ang canopy airflow sa pamamagitan ng thinning',
+        'Linisin ang nahulog na debris sa ilalim ng puno',
+        'Mag-apply ng copper fungicide nang maaga at ulitin tuwing 2 linggo sa panahon ng tag-ulan',
+        'Sundin ang label instructions at safety precautions kapag nag-spray'
       ];
     }
     return [
-      'Remove dead fruits, leaves, and branches regularly',
-      'Clean up debris under the tree canopy',
-      'Prune for better airflow and reduced humidity',
-      'Apply copper fungicide every 2 weeks after blossom drop',
-      'Harvest during dry weather conditions',
-      'Cool harvested fruit immediately and store at 5°C'
+      'Regular na alisin ang patay na prutas, dahon, at sanga',
+      'Linisin ang debris sa ilalim ng tree canopy',
+      'Mag-prune para sa mas mahusay na airflow at nabawasang humidity',
+      'Mag-apply ng copper fungicide tuwing 2 linggo pagkatapos ng blossom drop',
+      'Mag-harvest sa tuyong kondisyon ng panahon',
+      'Palamigin agad ang na-harvest na prutas at i-store sa 5°C'
     ];
   }
   
   if (lowerLabel.includes('powdery') || lowerLabel.includes('mildew')) {
     return [
-      'Spray sulfur fungicide regularly following product label',
-      'Try homemade spray: 1 tbsp baking soda + ½ tsp liquid soap per gallon of water',
-      'Prune infected leaves and shoots - do not compost',
-      'Open canopy to improve sunlight and air circulation',
-      'Repeat treatment weekly for 3-4 weeks until resolved',
-      'Keep trees healthy with proper watering and nutrition'
+      'Mag-spray ng sulfur fungicide nang regular ayon sa product label',
+      'Subukan ang homemade spray: 1 tbsp baking soda + ½ tsp liquid soap bawat galon ng tubig',
+      'Prune ang apektadong dahon at shoots - huwag i-compost',
+      'Buksan ang canopy para mapabuti ang sikat ng araw at air circulation',
+      'Ulitin ang treatment linggo-linggo sa loob ng 3-4 na linggo hanggang malutas',
+      'Panatilihing malusog ang puno sa tamang pagdidilig at nutrisyon'
     ];
   }
   
   if (lowerLabel.includes('mite')) {
     return [
-      'Check leaves regularly for yellow spots and webbing',
-      'Release Neoseiulus californicus (predatory mites) when 50% of leaves show infestation',
-      'Release again when 75% of leaves are infested',
-      'Avoid using insecticides/miticides that harm beneficial mites',
-      'Release predatory mites annually (they don\'t survive winter)',
-      'Maintain healthy trees with proper watering and nutrition'
+      'Regular na suriin ang dahon para sa dilaw na spot at webbing',
+      'Mag-release ng Neoseiulus californicus (predatory mites) kapag 50% ng dahon ay may infestation',
+      'Mag-release ulit kapag 75% ng dahon ay apektado',
+      'Iwasan ang paggamit ng insecticides/miticides na nakakasira sa beneficial mites',
+      'Mag-release ng predatory mites taun-taon (hindi sila nakakaligtas sa taglamig)',
+      'Panatilihing malusog ang puno sa tamang pagdidilig at nutrisyon'
     ];
   }
   
   if (lowerLabel.includes('borer')) {
     return [
-      'Collect and destroy infested fruits with holes',
-      'Remove fallen fruits and leaves around the tree',
-      'Prune regularly to improve airflow and visibility',
-      'Apply neem oil or Bt (Bacillus thuringiensis) every 7-10 days during fruiting',
-      'Consider wrapping young fruits in paper/cloth bags',
-      'Maintain continuous monitoring and sanitation'
+      'Kolektahin at sirain ang apektadong prutas na may butas',
+      'Alisin ang nahulog na prutas at dahon sa paligid ng puno',
+      'Regular na mag-prune para mapabuti ang airflow at visibility',
+      'Mag-apply ng neem oil o Bt (Bacillus thuringiensis) tuwing 7-10 araw sa panahon ng fruiting',
+      'Isaalang-alang ang pagbabalot ng batang prutas sa paper/cloth bags',
+      'Panatilihin ang tuloy-tuloy na monitoring at sanitation'
     ];
   }
   
   return [
-    'Early intervention recommended',
-    'Monitor closely for spread',
-    'Consider consulting local agricultural extension office',
-    'Maintain good orchard sanitation'
+    'Inirerekomenda ang maagang interbensyon',
+    'Mabuti ang pagsubaybay para sa pagkalat',
+    'Isaalang-alang ang pagkokonsulta sa lokal na agricultural extension office',
+    'Panatilihin ang mabuting orchard sanitation'
   ];
 };
 
@@ -203,7 +203,7 @@ const Capture: React.FC = () => {
   const handleCapture = async () => {
     try {
       if (!modelType) {
-        setError('Please select a capture type first.');
+        setError('Mangyaring pumili muna ng uri ng detection.');
         return;
       }
 
@@ -220,7 +220,7 @@ const Capture: React.FC = () => {
       setTimeout(() => processImage(photo.dataUrl!), 300);
     } catch (err) {
       console.error('Camera error:', err);
-      setError('Failed to capture image.');
+      setError('Nabigo ang pagkuha ng larawan.');
     }
   };
 
@@ -268,7 +268,7 @@ const Capture: React.FC = () => {
         setShowResultModal(true);
       } else {
         setImage(null);
-        setError('No avocado or disease detected.');
+        setError('WALANG MAKITANG AVOCADO O PROBLEMA');
       }
     } catch (err) {
       console.error('Processing error:', err);
@@ -277,10 +277,10 @@ const Capture: React.FC = () => {
       setImage(null);
       
       // Check if this is a "not avocado" error from native code
-      if (errorMessage.includes('No avocado detected') || errorMessage.includes('below threshold') || errorMessage.includes('No detections found')) {
-        setError('No avocado or disease detected.');
+      if (errorMessage.includes('No avocado detected') || errorMessage.includes('below threshold') || errorMessage.includes('No detections found') || errorMessage.includes('Walang avocado na makita') || errorMessage.includes('Walang makita')) {
+        setError('WALANG MAKITANG AVOCADO O PROBLEMA');
       } else {
-        setError('Failed to process image: ' + errorMessage);
+        setError('WALANG MAKITANG AVOCADO O PROBLEMA');
       }
     } finally {
       setLoading(false);
@@ -345,7 +345,7 @@ const Capture: React.FC = () => {
         recommendations: getRecommendations(result.label)
       });
 
-      setSuccessMessage('Saved to history successfully!');
+      setSuccessMessage('Matagumpay na na-save sa history!');
       setShowResultModal(false);
       setTimeout(() => setSuccessMessage(null), 2000);
     } catch (err) {
@@ -353,9 +353,9 @@ const Capture: React.FC = () => {
       const errorMessage = (err as Error).message || 'Unknown error';
       
       if (errorMessage.includes('quota') || errorMessage.includes('QuotaExceededError')) {
-        setError('Storage full! Please clear old history items.');
+        setError('Puno na ang storage! Mangyaring linisin ang lumang history items.');
       } else {
-        setError('Failed to save to history');
+        setError('Nabigo ang pag-save sa history');
       }
     } finally {
       setLoading(false);
@@ -416,7 +416,7 @@ const Capture: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
-          <IonTitle>Snap and Analyze</IonTitle>
+          <IonTitle>Kumuha at Suriin</IonTitle>
           <IonButtons slot="end">
             <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
           </IonButtons>
@@ -427,7 +427,7 @@ const Capture: React.FC = () => {
         <div className="capture-container">
           {/* Model Type Selector */}
           <div className="model-selector">
-            <h3 className="selector-title">Select Detection Type</h3>
+            <h3 className="selector-title">Pumili ng Uri ng Detection</h3>
             <IonSegment 
               value={modelType} 
               onIonChange={e => setModelType(e.detail.value as 'leaf' | 'tree' | 'fruit')}
@@ -435,22 +435,36 @@ const Capture: React.FC = () => {
               <IonSegmentButton value="leaf">
                 <IonLabel>
                   <IonIcon icon={leafOutline} />
-                  <div>Leaf</div>
+                  <div>DAHON</div>
                 </IonLabel>
               </IonSegmentButton>
               <IonSegmentButton value="fruit">
                 <IonLabel>
                   <IonIcon icon={nutritionOutline} />
-                  <div>Fruit</div>
+                  <div>PRUTAS</div>
                 </IonLabel>
               </IonSegmentButton>
               <IonSegmentButton value="tree">
                 <IonLabel>
                   <IonIcon icon={leafOutline} />
-                  <div>Tree</div>
+                  <div>PUNO</div>
                 </IonLabel>
               </IonSegmentButton>
             </IonSegment>
+          </div>
+
+          {/* Instruction Text */}
+          <div className="instruction-text">
+            <p className="instruction-main">Pindutin Ang Button Para Buksan Ang Camera</p>
+          </div>
+
+          {/* Camera Button */}
+          <div className="camera-controls">
+            <button className="capture-btn" onClick={handleCapture}>
+              <div className="capture-btn-inner">
+                <IonIcon icon={cameraOutline} />
+              </div>
+            </button>
           </div>
 
           {/* Camera View Area */}
@@ -473,28 +487,12 @@ const Capture: React.FC = () => {
             )}
           </div>
 
-          {/* Camera Controls */}
-          <div className="camera-controls">
-            <button className="control-btn secondary">
-              <IonIcon icon={flashlightOutline} />
-            </button>
-            
-            <button className="capture-btn" onClick={handleCapture}>
-              <div className="capture-btn-inner">
-                <IonIcon icon={cameraOutline} />
-              </div>
-            </button>
-            
-            <button className="control-btn secondary">
-              <IonIcon icon={cameraOutline} />
-            </button>
-          </div>
 
           {/* Results Modal */}
           <IonModal isOpen={showResultModal} onDidDismiss={() => setShowResultModal(false)} className="ion-color-light">
             <IonHeader>
               <IonToolbar color="light">
-                <IonTitle>Detection Complete</IonTitle>
+                <IonTitle>Tapos na ang Detection</IonTitle>
               </IonToolbar>
             </IonHeader>
             <IonContent className="modal-content ion-color-light">
@@ -514,12 +512,12 @@ const Capture: React.FC = () => {
                         {result.label.toLowerCase().includes('pest') || 
                          result.label.toLowerCase().includes('borer') || 
                          result.label.toLowerCase().includes('scale') ||
-                         result.label.toLowerCase().includes('mite') ? 'Pest' : 'Disease'} Detected
+                         result.label.toLowerCase().includes('mite') ? 'Peste' : 'Sakit'} Nakita
                       </div>
                       <div className="result-label">{capitalizeFirstLetter(result.label)}</div>
                     </div>
                   </div>
-                  <p className="result-date">Analyzed: {new Date().toLocaleDateString()}</p>
+                  <p className="result-date">Nasuri: {new Date().toLocaleDateString()}</p>
                   
                   {result && (
                     <>
@@ -528,7 +526,7 @@ const Capture: React.FC = () => {
                       </div>
                       
                       <div className="result-actions">
-                        <h4>Recommended Actions</h4>
+                        <h4>Inirerekomendang Aksyon</h4>
                         {getRecommendations(result.label).map((rec, index) => (
                           <div key={index} className="action-item">
                             <IonIcon icon={checkmarkCircleOutline} className="action-icon" />
@@ -545,7 +543,7 @@ const Capture: React.FC = () => {
                       className="save-history-btn"
                       onClick={saveToHistory}
                     >
-                      Save to History
+                      I-save sa History
                     </IonButton>
                     <IonButton 
                       expand="block" 
@@ -553,7 +551,7 @@ const Capture: React.FC = () => {
                       className="close-modal-btn"
                       onClick={() => setShowResultModal(false)}
                     >
-                      Close
+                      Isara
                     </IonButton>
                   </div>
                 </div>
@@ -562,12 +560,12 @@ const Capture: React.FC = () => {
           </IonModal>
         </div>
 
-        <IonLoading isOpen={loading} message="Processing image..." />
+        <IonLoading isOpen={loading} message="Pinoproseso ang larawan..." />
 
         <IonAlert
           isOpen={!!error}
           onDidDismiss={() => setError(null)}
-          header={error?.includes('No avocado or disease detected') ? 'Detection Status' : error?.includes('successfully') ? 'Success' : 'Error'}
+          header="RESULTA"
           message={error || ''}
           buttons={['OK']}
         />
@@ -575,7 +573,7 @@ const Capture: React.FC = () => {
         <IonAlert
           isOpen={!!successMessage}
           onDidDismiss={() => setSuccessMessage(null)}
-          header="Success"
+          header="Tagumpay"
           message={successMessage || ''}
           buttons={['OK']}
         />

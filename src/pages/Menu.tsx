@@ -20,33 +20,33 @@ const Menu: React.FC = () => {
 
   const menuItems = [
     {
-      title: "Capture",
+      title: "Kumuha",
       icon: cameraOutline,
       path: "/capture",
-      description: "Avocado, Leaf, Disease, Pest",
+      description: "Abokado, Dahon, Sakit, Peste",
       color: "#10b981",
     },
     {
-      title: "Upload",
+      title: "Mag-upload",
       icon: cloudUploadOutline,
       path: "/upload",
-      description: "Upload images of leaf or avocado",
+      description: "Mag-upload ng larawan ng dahon o abokado",
       color: "#f59e0b",
     },
     {
-      title: "Treatments",
+      title: "Mga Paraan ng Paggamot",
       icon: beakerOutline,
       path: "/treatments",
-      description: "Care actions and remedies",
+      description: "Mga aksyon sa pangangalaga at remedyo",
       color: "#ef4444",
     },
-    { title: "User Guide", icon: helpCircleOutline, path: "/guide", description: "User Manual", color: "#8b5cf6" },
-    { title: "History", icon: timeOutline, path: "/history", description: "View past detections", color: "#06b6d4" },
+    { title: "Gabay", icon: helpCircleOutline, path: "/guide", description: "Manwal ng Gumagamit", color: "#8b5cf6" },
+    { title: "Nakaraang Resulta", icon: timeOutline, path: "/history", description: "Tingnan ang nakaraang detections", color: "#06b6d4" },
     {
-      title: "About",
+      title: "Tungkol",
       icon: informationCircleOutline,
       path: "/about",
-      description: "About Snapocado",
+      description: "Tungkol sa Snapocado",
       color: "#ec4899",
     },
   ]
@@ -65,7 +65,7 @@ const Menu: React.FC = () => {
         <div className="menu-container">
           <div className="menu-header">
             <h1>
-              How Can I Help You <span className="highlight">Today?</span>
+              Paano Kita <span className="highlight">Matutulungan Ngayon?</span>
             </h1>
           </div>
 

@@ -11,7 +11,7 @@ const About: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/menu" />
           </IonButtons>
-          <IonTitle>About</IonTitle>
+          <IonTitle>Tungkol</IonTitle>
           <IonButtons slot="end">
             <img src="/images/logo_snapocado.png" alt="Snapocado" className="toolbar-logo-small" />
           </IonButtons>
@@ -21,62 +21,52 @@ const About: React.FC = () => {
         <div className="about-container">
           <div className="about-header">
             <h1>
-              About <span className="highlight">Snapocado</span>
+              Tungkol sa <span className="highlight">Snapocado</span>
             </h1>
             <p className="about-subtitle">
-              Snapocado is your free, easy-to-use mobile app that helps avocado farmers detect diseases and pests — just by taking a photo.
+              Ang Snapocado ay iyong libre at madaling gamitin na mobile app na tumutulong sa mga magsasaka ng abokado na makita ang mga sakit at peste — sa pamamagitan lamang ng pagkuha ng larawan.
             </p>
             <p className="about-subtitle-secondary">
-               Snapocado uses smart technology to scan your avocado leaves, fruits, or trees and tell you what's wrong in seconds.
+               Gumagamit ang Snapocado ng matalinong teknolohiya upang i-scan ang iyong mga dahon, prutas, o puno ng abokado at sabihin sa iyo kung ano ang problema sa loob ng ilang segundo.
             </p>
           </div>
 
           <div className="about-section">
-            <h2>What We Do</h2>
+            <h2>Ano ang Aming Ginagawa</h2>
             <div className="feature-list">
               <div className="feature-item">
                 <IonIcon icon={checkmarkCircleOutline} className="feature-icon" />
                 <div>
-                  <h3>Detect problems early</h3>
-                  <p>Identify issues like scab, anthracnose, mites, or borers quickly</p>
+                  <h3>Makita ang mga problema nang maaga</h3>
+                  <p>Kilalanin ang mga isyu tulad ng scab, anthracnose, mites, o borers nang mabilis</p>
                 </div>
               </div>
               <div className="feature-item">
                 <IonIcon icon={checkmarkCircleOutline} className="feature-icon" />
                 <div>
-                  <h3>Give simple, practical advice</h3>
-                  <p>Receive step-by-step guidance on what to do next</p>
+                  <h3>Magbigay ng simple at praktikal na payo</h3>
+                  <p>Makatanggap ng step-by-step na gabay sa kung ano ang susunod na gagawin</p>
                 </div>
               </div>
               <div className="feature-item">
                 <IonIcon icon={checkmarkCircleOutline} className="feature-icon" />
                 <div>
-                  <h3>Save your results</h3>
-                  <p>Track progress over time with your detection history</p>
+                  <h3>I-save ang iyong mga resulta</h3>
+                  <p>Subaybayan ang pag-unlad sa paglipas ng panahon gamit ang iyong detection history</p>
                 </div>
               </div>
               <div className="feature-item">
                 <IonIcon icon={callOutline} className="feature-icon" />
                 <div>
-                  <h3>Connect you to experts</h3>
-                  <p>Call the City Agriculture Office directly from the app</p>
+                  <h3>Ikonekta ka sa mga eksperto</h3>
+                  <p>Tumawag sa City Agriculture Office nang direkta mula sa app</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="about-section mission-section">
-            <h2>Our Mission</h2>
-            <p>
-              To help every avocado farmer in San Pablo, Laguna grow healthier trees and stronger harvests — without guesswork.
-            </p>
-            <p className="mission-belief">
-              We believe technology should be simple, free, and useful.
-            </p>
-          </div>
-
           <div className="about-section contact-section">
-            <h2>Contact Us</h2>
+            <h2>Makipag-ugnayan</h2>
             <div className="contact-card">
               <div className="contact-header">
                 <h3>City Agriculture Office</h3>
@@ -86,14 +76,14 @@ const About: React.FC = () => {
                 <div className="contact-item">
                   <IonIcon icon={callOutline} className="contact-icon" />
                   <div>
-                    <span className="contact-label">Phone</span>
+                    <span className="contact-label">Telepono</span>
                     <a href="tel:+63495032229" className="contact-value">(049) 503-2229</a>
                   </div>
                 </div>
                 <div className="contact-item">
                   <IonIcon icon={locationOutline} className="contact-icon" />
                   <div>
-                    <span className="contact-label">Location</span>
+                    <span className="contact-label">Lokasyon</span>
                     <span className="contact-value">386M+VWF, San Pablo City, Laguna</span>
                   </div>
                 </div>
