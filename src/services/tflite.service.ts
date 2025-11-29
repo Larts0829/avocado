@@ -26,29 +26,21 @@ export interface PredictionResult {
   };
 }
 
+const normalizeLabel = (label: string): string => label.trim().toLowerCase();
+
 // Fruit model labels: Healthy fruit, anthracnose, scab
 const FRUIT_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'Healthy fruit': 0.60,
-  'Healthy Fruit': 0.60,
+  'healthy fruit': 0.6,
+  'anthracnose': 0.7,
   'scab': 0.77,
-  'Scab': 0.77,
-  'anthracnose': 0.70,
-  'Anthracnose': 0.70
 };
 
-// Leaf model labels: healthy, anthracnose leaf, mites, powdery mildew
-// Lowered thresholds for better field detection
+// Leaf model labels: anthracnose leaf, healthy, mites, powdery mildew
 const LEAF_CONFIDENCE_THRESHOLDS: Record<string, number> = {
-  'healthy': 0.90,
-  'Healthy': 0.90,
-  'Healthy Leaf': 0.90,
-  'anthracnose leaf': 0.15,  // Further lowered for better field detection
-  'Anthracnose Leaf': 0.15,
-  'mites': 0.12,              // Lowered for better detection
-  'Mites': 0.12,
-  'Spider Mites': 0.12,
-  'powdery mildew': 0.25,     // Lowered for better detection
-  'Powdery Mildew': 0.25
+  'healthy': 0.65,
+  'anthracnose leaf': 0.65,
+  'mites': 0.35,
+  'powdery mildew': 0.25,
 };
 
 // Tree model label: borer
@@ -162,16 +154,12 @@ class TFLiteService {
    */
   private isConfidenceSufficient(label: string, confidence: number): boolean {
     let threshold: number;
-    const normalizedLabel = label.toLowerCase();
+    const normalizedLabel = normalizeLabel(label);
     
     if (this.isFruitModel) {
-      threshold = FRUIT_CONFIDENCE_THRESHOLDS[label] || 
-                  FRUIT_CONFIDENCE_THRESHOLDS[normalizedLabel] || 
-                  DEFAULT_CONFIDENCE_THRESHOLD;
+      threshold = FRUIT_CONFIDENCE_THRESHOLDS[normalizedLabel] || DEFAULT_CONFIDENCE_THRESHOLD;
     } else if (this.isLeafModel) {
-      threshold = LEAF_CONFIDENCE_THRESHOLDS[label] || 
-                  LEAF_CONFIDENCE_THRESHOLDS[normalizedLabel] || 
-                  DEFAULT_CONFIDENCE_THRESHOLD;
+      threshold = LEAF_CONFIDENCE_THRESHOLDS[normalizedLabel] || DEFAULT_CONFIDENCE_THRESHOLD;
       console.log(`[TFLite] Leaf model threshold check: ${label}`);
     } else if (this.isTreeModel) {
       threshold = TREE_CONFIDENCE_THRESHOLD;

@@ -45,22 +45,26 @@ public class TFLiteNative extends Plugin {
         FRUIT_CONFIDENCE_THRESHOLDS = map;
     }
     
-    // Leaf model labels from leaf_labels.txt: healthy, anthracnose leaf, mites, powdery mildew
-    // Lower thresholds for better detection - especially anthracnose leaf which has high mAP50 (0.851)
+    // Leaf model labels from leaf_labels.txt: anthracnose leaf, healthy, mites, powdery mildew
     private static final Map<String, Float> LEAF_CONFIDENCE_THRESHOLDS;
     static {
         Map<String, Float> map = new HashMap<>();
-        map.put("healthy", 0.90f);
-        map.put("anthracnose leaf", 0.20f);  // Lowered from 0.25 to catch more detections
+        map.put("anthracnose leaf", 0.70f);
+        map.put("healthy", 0.65f);
         map.put("mites", 0.35f);
         map.put("powdery mildew", 0.30f);
-        map.put("Healthy", 0.90f);
-        map.put("Healthy Leaf", 0.90f);
-        map.put("Anthracnose Leaf", 0.20f);  // Lowered from 0.25 to catch more detections
-        map.put("Mites", 0.35f);
-        map.put("Powdery Mildew", 0.30f);
-        map.put("Spider Mites", 0.35f);
         LEAF_CONFIDENCE_THRESHOLDS = map;
+    }
+    
+    private static final Map<String, Integer> LEAF_CLASS_INDEX_MAP;
+    static {
+        Map<String, Integer> map = new HashMap<>();
+        // Update these if the new model has different class ordering
+        map.put("anthracnose leaf", 0);  // Model class index for anthracnose leaf
+        map.put("healthy", 1);            // Model class index for healthy
+        map.put("mites", 2);              // Model class index for mites
+        map.put("powdery mildew", 3);    // Model class index for powdery mildew
+        LEAF_CLASS_INDEX_MAP = map;
     }
     
     // Tree model label from tree_labels.txt: borer
@@ -118,6 +122,20 @@ public class TFLiteNative extends Plugin {
             Log.d(TAG, "Labels loaded: " + labels.size());
             for (int i = 0; i < labels.size(); i++) {
                 Log.d(TAG, String.format("Label index %d: '%s'", i, labels.get(i)));
+            }
+            
+            // Log leaf model label order for verification
+            if (isLeafModel) {
+                Log.d(TAG, "=== LEAF MODEL LABEL ORDER ===");
+                for (int i = 0; i < labels.size(); i++) {
+                    String labelName = labels.get(i);
+                    Float threshold = LEAF_CONFIDENCE_THRESHOLDS.get(labelName);
+                    if (threshold == null) {
+                        threshold = DEFAULT_CONFIDENCE_THRESHOLD;
+                    }
+                    Log.d(TAG, String.format("Class %d: '%s' (threshold: %.2f)", i, labelName, threshold));
+                }
+                Log.d(TAG, "===============================");
             }
 
             call.resolve();
@@ -282,59 +300,44 @@ public class TFLiteNative extends Plugin {
                     }
                 }
                 
-                // Enhanced logging with threshold information
-                Log.d(TAG, "=== All Class Confidences ===");
-                for (int i = 0; i < numClasses && i < labels.size(); i++) {
-                    String labelName = labels.get(i);
-                    float threshold = getThresholdForLabel(labelName);
-                    
-                    boolean meetsThreshold = maxClassConfidences[i] >= threshold;
-                    Log.d(TAG, String.format("Class %d (%s): %.3f (threshold: %.2f) %s", 
-                        i, labelName, maxClassConfidences[i], threshold, 
-                        meetsThreshold ? "✓ PASS" : "✗ FAIL"));
+                // Log all class confidences for leaf model
+                if (isLeafModel) {
+                    Log.d(TAG, "=== ALL CLASS CONFIDENCES (Leaf Model) ===");
+                    for (int i = 0; i < numClasses && i < labels.size(); i++) {
+                        Log.d(TAG, String.format("Class %d (%s): %.3f", i, labels.get(i), maxClassConfidences[i]));
+                    }
+                    Log.d(TAG, "=========================================");
                 }
-                Log.d(TAG, "============================");
 
                 // Second pass: Find best class that meets threshold
                 int bestClassIndex = -1;
                 float bestConfidence = 0;
                 int bestBoxIndex = 0;
                 
+                Log.d(TAG, "=== DETECTION ANALYSIS (Leaf Model) ===");
                 for (int classIdx = 0; classIdx < numClasses && classIdx < labels.size(); classIdx++) {
                     String className = labels.get(classIdx);
                     if (className == null || className.trim().isEmpty()) {
                         continue;
                     }
                     
-                    // ONLY skip healthy for leaf model
-                    if (isLeafModel && (className.equalsIgnoreCase("healthy") || 
-                                        className.equalsIgnoreCase("Healthy Leaf"))) {
-                        Log.d(TAG, String.format("Skipping healthy class: %s", className));
-                        continue;
-                    }
-                    
                     float confidence = maxClassConfidences[classIdx];
                     float threshold = getThresholdForLabel(className);
                     
-                    if (isLeafModel) {
-                        Log.d(TAG, String.format("Leaf model - checking %s: conf=%.3f, thresh=%.2f", 
-                            className, confidence, threshold));
-                    }
+                    Log.d(TAG, String.format("Class %d (%s): conf=%.3f, threshold=%.2f %s", 
+                        classIdx, className, confidence, threshold,
+                        (confidence >= threshold) ? "✓ PASS" : "✗ FAIL"));
                     
                     if (confidence >= threshold) {
-                        Log.d(TAG, String.format("Class %d (%s) PASSES threshold: %.3f >= %.2f", 
-                            classIdx, className, confidence, threshold));
                         if (confidence > bestConfidence) {
                             bestConfidence = confidence;
                             bestClassIndex = classIdx;
                             bestBoxIndex = maxClassBoxIndices[classIdx];
-                            Log.d(TAG, String.format("NEW BEST: %s with confidence %.3f", className, confidence));
+                            Log.d(TAG, String.format("NEW BEST: Class %d (%s) confidence %.3f", classIdx, className, confidence));
                         }
-                    } else {
-                        Log.d(TAG, String.format("Class %d (%s) FAILS threshold: %.3f < %.2f", 
-                            classIdx, className, confidence, threshold));
                     }
                 }
+                Log.d(TAG, "====================================");
                 
                 if (bestClassIndex == -1) {
                     Log.w(TAG, "No class met its threshold");
@@ -356,13 +359,6 @@ public class TFLiteNative extends Plugin {
                 
                 if (predictedLabel == null || predictedLabel.trim().isEmpty()) {
                     Log.w(TAG, "REJECTED: Empty/null label detected");
-                    call.reject("No avocado or disease detected.");
-                    return;
-                }
-                
-                if (isLeafModel && (predictedLabel.equalsIgnoreCase("healthy") || 
-                                    predictedLabel.equalsIgnoreCase("Healthy Leaf"))) {
-                    Log.w(TAG, "REJECTED: Healthy leaf detected");
                     call.reject("No avocado or disease detected.");
                     return;
                 }
